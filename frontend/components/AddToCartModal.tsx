@@ -520,4 +520,29 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.lg,
     fontWeight: theme.fontWeight.bold,
   },
+  colorVariantCard: {
+    width: 100,
+    marginHorizontal: theme.spacing.xs,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+    overflow: 'hidden',
+    alignItems: 'center',
+  },
+  colorVariantSelected: {
+    borderColor: theme.colors.primary,
+    borderWidth: 3,
+  },
+  colorImage: {
+    width: '100%',
+    height: 100,
+    backgroundColor: theme.colors.backgroundGray,
+  },
+  colorName: {
+    padding: theme.spacing.sm,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.text,
+    textAlign: 'center',
+    fontWeight: theme.fontWeight.medium,
+  },
 });
