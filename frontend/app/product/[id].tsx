@@ -17,6 +17,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { doc, getDoc, collection, query, where, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { theme } from '../../config/theme';
+import { Header } from '../../components/Header';
+import { TabBar } from '../../components/TabBar';
 import { ImageCarousel } from '../../components/ImageCarousel';
 import { AddToCartModal } from '../../components/AddToCartModal';
 import { ProductCard } from '../../components/ProductCard';
