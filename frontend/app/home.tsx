@@ -6,6 +6,8 @@ import {
   FlatList,
   Alert,
   Text,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../config/theme';
@@ -16,70 +18,24 @@ import { CategoryCard } from '../components/CategoryCard';
 import { ProductCard } from '../components/ProductCard';
 import { TabBar } from '../components/TabBar';
 import { WhatsAppButton } from '../components/WhatsAppButton';
-
-// Mock data - في الإصدار النهائي سيتم جلبها من Firebase
-const categories = [
-  { id: '1', name: 'الكل', icon: 'grid' as const, color: theme.colors.primary },
-  { id: '2', name: 'جمال', icon: 'rose' as const, color: '#EC4899' },
-  { id: '3', name: 'أزياء', icon: 'shirt' as const, color: '#8B5CF6' },
-  { id: '4', name: 'إلكترونيات', icon: 'phone-portrait' as const, color: '#3B82F6' },
-  { id: '5', name: 'منزل', icon: 'home' as const, color: '#10B981' },
-];
-
-const mockProducts = [
-  {
-    id: '1',
-    name: 'سماعة Air Pro اللاسلكية',
-    image: 'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=400',
-    wholesalePrice: 4750,
-    tags: ['بطارية قوية', 'صوت نقي'],
-    status: 'متوفر',
-  },
-  {
-    id: '2',
-    name: 'طقم مكياج فاخر',
-    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400',
-    wholesalePrice: 12500,
-    tags: ['حصري', 'جو رومانسي'],
-    status: 'كمية محدودة',
-  },
-  {
-    id: '3',
-    name: 'ساعة ذكية رياضية',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
-    wholesalePrice: 8900,
-    tags: ['مقاوم للماء', 'تتبع صحي'],
-    status: 'متوفر',
-  },
-  {
-    id: '4',
-    name: 'مقلاة غير لاصقة',
-    image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400',
-    wholesalePrice: 3200,
-    tags: ['مسطح غير لاصق', 'سهل التنظيف'],
-    status: 'متوفر',
-  },
-  {
-    id: '5',
-    name: 'حقيبة جلدية فاخرة',
-    image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400',
-    wholesalePrice: 15750,
-    tags: ['جلد أصلي', 'تصميم عصري'],
-    status: 'متوفر',
-  },
-  {
-    id: '6',
-    name: 'عطر رجالي فاخر',
-    image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400',
-    wholesalePrice: 6800,
-    tags: ['رائحة مميزة', 'يدوم طويلاً'],
-    status: 'كمية محدودة',
-  },
-];
+import { useProducts } from '../hooks/useProducts';
+import { useCategories } from '../hooks/useCategories';
 
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  
+  const { categories, loading: categoriesLoading } = useCategories();
+  const { products, loading: productsLoading, error, refetch } = useProducts(selectedCategory, 20);
+  
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const handleMenuPress = () => {
     Alert.alert('القائمة', 'سيتم فتح القائمة الجانبية');
