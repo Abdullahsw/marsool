@@ -6,46 +6,18 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../config/theme';
+import { useBanners } from '../hooks/useBanners';
 
 const { width } = Dimensions.get('window');
 const BANNER_HEIGHT = 180;
 
-interface BannerItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  color: string;
-}
-
-const banners: BannerItem[] = [
-  {
-    id: '1',
-    title: 'اختر المنتج وسجل بيانات عميلك',
-    subtitle: 'ونحنا نوصل الطلب لباب بيته',
-    icon: 'rocket',
-    color: theme.colors.primary,
-  },
-  {
-    id: '2',
-    title: 'بدون رأس مال',
-    subtitle: 'ابدأ البيع فوراً بدون أي تكاليف',
-    icon: 'wallet',
-    color: theme.colors.success,
-  },
-  {
-    id: '3',
-    title: 'تحويل أرباح سريع',
-    subtitle: 'استلم أرباحك فور التوصيل',
-    icon: 'flash',
-    color: theme.colors.warning,
-  },
-];
-
 export const Banner: React.FC = () => {
+  const { banners, loading } = useBanners();
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
 
