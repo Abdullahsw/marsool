@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,26 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { theme } from '../config/theme';
 
-interface Variant {
+interface ColorVariant {
   id: string;
   name: string;
-  color?: string;
-  image?: string;
+  imageUrl?: string;
+  subProperty?: {
+    name: string;
+    options: SizeOption[];
+  };
+}
+
+interface SizeOption {
+  value: string;
+  quantity: number;
+  wholesalePrice: number;
 }
 
 interface AddToCartModalProps {
@@ -31,14 +41,14 @@ interface AddToCartModalProps {
     maxSellingPrice: number;
     stock: number;
     maxOrderQuantity?: number;
-    variants?: Variant[];
-    sizes?: string[];
+    variants?: ColorVariant[];
   };
   onAddToCart: (data: {
     quantity: number;
     sellingPrice: number;
     selectedVariant?: string;
     selectedSize?: string;
+    wholesalePrice: number;
   }) => void;
 }
 
@@ -50,12 +60,34 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [sellingPrice, setSellingPrice] = useState(product.minSellingPrice);
-  const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
-  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [selectedVariantIndex, setSelectedVariantIndex] = useState<number | undefined>();
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | undefined>();
+  const [currentWholesalePrice, setCurrentWholesalePrice] = useState(product.wholesalePrice);
+  const [availableStock, setAvailableStock] = useState(product.stock);
+
+  // Get available sizes based on selected color
+  const availableSizes = useMemo(() => {
+    if (selectedVariantIndex !== undefined && product.variants) {
+      return product.variants[selectedVariantIndex]?.subProperty?.options || [];
+    }
+    return [];
+  }, [selectedVariantIndex, product.variants]);
+
+  // Update wholesale price and stock when variant/size changes
+  useEffect(() => {
+    if (selectedVariantIndex !== undefined && selectedSizeIndex !== undefined && availableSizes.length > 0) {
+      const selectedSize = availableSizes[selectedSizeIndex];
+      setCurrentWholesalePrice(selectedSize.wholesalePrice);
+      setAvailableStock(selectedSize.quantity);
+    } else {
+      setCurrentWholesalePrice(product.wholesalePrice);
+      setAvailableStock(product.stock);
+    }
+  }, [selectedVariantIndex, selectedSizeIndex, availableSizes, product]);
 
   const profit = useMemo(() => {
-    return Math.round((sellingPrice - product.wholesalePrice) * quantity);
-  }, [sellingPrice, product.wholesalePrice, quantity]);
+    return Math.round((sellingPrice - currentWholesalePrice) * quantity);
+  }, [sellingPrice, currentWholesalePrice, quantity]);
 
   const handleQuantityChange = (increment: boolean) => {
     const newQuantity = increment ? quantity + 1 : quantity - 1;
