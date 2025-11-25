@@ -196,28 +196,28 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 }}
                 keyboardType="numeric"
               />
-              <View style={styles.sliderContainer}>
-                <Slider
-                  style={styles.slider}
-                  minimumValue={product.minSellingPrice}
-                  maximumValue={product.maxSellingPrice}
-                  value={sellingPrice}
-                  step={250}
-                  onValueChange={(value) => {
-                    const roundedValue = Math.round(value / 250) * 250;
-                    setSellingPrice(roundedValue);
-                  }}
-                  minimumTrackTintColor={theme.colors.primary}
-                  maximumTrackTintColor={theme.colors.border}
-                  thumbTintColor={theme.colors.primary}
-                />
-              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={product.minSellingPrice}
+                maximumValue={product.maxSellingPrice}
+                value={product.maxSellingPrice + product.minSellingPrice - sellingPrice}
+                step={250}
+                onValueChange={(value) => {
+                  // Reverse the value for RTL
+                  const reversedValue = product.maxSellingPrice + product.minSellingPrice - value;
+                  const roundedValue = Math.round(reversedValue / 250) * 250;
+                  setSellingPrice(roundedValue);
+                }}
+                minimumTrackTintColor={theme.colors.border}
+                maximumTrackTintColor={theme.colors.primary}
+                thumbTintColor={theme.colors.primary}
+              />
               <View style={styles.priceRange}>
                 <Text style={styles.rangeText}>
-                  {Math.round(product.maxSellingPrice).toLocaleString('ar-IQ')}
+                  {Math.round(product.minSellingPrice).toLocaleString('ar-IQ')}
                 </Text>
                 <Text style={styles.rangeText}>
-                  {Math.round(product.minSellingPrice).toLocaleString('ar-IQ')}
+                  {Math.round(product.maxSellingPrice).toLocaleString('ar-IQ')}
                 </Text>
               </View>
               
