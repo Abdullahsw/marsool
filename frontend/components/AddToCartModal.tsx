@@ -139,14 +139,20 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       ? availableSizes[selectedSizeIndex].value
       : undefined;
 
+    // Determine image URL
+    let imageUrl = '';
+    if (product.variants && selectedVariantIndex !== undefined) {
+      imageUrl = product.variants[selectedVariantIndex].imageUrl || '';
+    } else if (product.images && product.images.length > 0) {
+      imageUrl = product.images[0];
+    }
+
     // Add to cart using context
     cart.addToCart({
       id: '', // Will be generated in context
       productId: product.id,
       name: product.name,
-      imageUrl: product.variants && selectedVariantIndex !== undefined 
-        ? product.variants[selectedVariantIndex].imageUrl || ''
-        : '',
+      imageUrl,
       wholesalePrice: currentWholesalePrice,
       sellingPrice,
       quantity,
