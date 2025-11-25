@@ -100,26 +100,63 @@ export default function ProductDetailsScreen() {
   };
 
   const parseVariants = (variantSchema: any) => {
-    if (!variantSchema || !Array.isArray(variantSchema)) return undefined;
+    if (!variantSchema || !Array.isArray(variantSchema)) {
+      console.log('❌ No variantSchema or not an array');
+      return undefined;
+    }
+    
+    console.log('📦 variantSchema:', JSON.stringify(variantSchema, null, 2));
     
     // Find visual variant (colors with images)
     const visualVariant = variantSchema.find((v: any) => v.type === 'visual');
     
     if (visualVariant && visualVariant.options) {
-      return visualVariant.options.map((opt: any, index: number) => {
+      console.log('✅ Found visual variant:', visualVariant.name);
+      
+      const parsedVariants = visualVariant.options.map((opt: any, index: number) => {
+        // Parse color name
         const colorName = typeof opt.value === 'object' 
           ? (opt.value.ar || opt.value.en || opt.value.ku)
           : opt.value;
+        
+        // Parse subProperty if exists
+        let parsedSubProperty = undefined;
+        if (opt.subProperty) {
+          const subPropName = typeof opt.subProperty.name === 'object'
+            ? (opt.subProperty.name.ar || opt.subProperty.name.en || opt.subProperty.name.ku)
+            : opt.subProperty.name;
+          
+          const subPropOptions = opt.subProperty.options?.map((sizeOpt: any) => {
+            const sizeName = typeof sizeOpt.value === 'object'
+              ? (sizeOpt.value.ar || sizeOpt.value.en || sizeOpt.value.ku)
+              : sizeOpt.value;
+            
+            return {
+              value: sizeName,
+              quantity: sizeOpt.quantity || 0,
+              wholesalePrice: sizeOpt.wholesalePrice || 0,
+            };
+          }) || [];
+          
+          parsedSubProperty = {
+            name: subPropName,
+            options: subPropOptions,
+          };
+        }
           
         return {
           id: `color-${index}`,
           name: colorName,
           imageUrl: opt.imageUrl,
-          subProperty: opt.subProperty, // Keep subProperty for sizes
+          subProperty: parsedSubProperty,
         };
       });
+      
+      console.log('✅ Parsed variants:', JSON.stringify(parsedVariants, null, 2));
+      return parsedVariants;
     }
     
+    console.log('❌ No visual variant found');
     return undefined;
   };
 
