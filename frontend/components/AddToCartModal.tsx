@@ -184,40 +184,49 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               <Text style={styles.sectionTitle}>سعر البيع للزبون:</Text>
               <TextInput
                 style={styles.priceInput}
-                value={sellingPrice.toString()}
+                value={Math.round(sellingPrice).toLocaleString('ar-IQ')}
                 onChangeText={(text) => {
-                  const price = parseInt(text) || product.minSellingPrice;
-                  if (price >= product.minSellingPrice && price <= product.maxSellingPrice) {
-                    setSellingPrice(price);
+                  const numericText = text.replace(/[^0-9]/g, '');
+                  const price = parseInt(numericText) || product.minSellingPrice;
+                  // Round to nearest 250
+                  const roundedPrice = Math.round(price / 250) * 250;
+                  if (roundedPrice >= product.minSellingPrice && roundedPrice <= product.maxSellingPrice) {
+                    setSellingPrice(roundedPrice);
                   }
                 }}
                 keyboardType="numeric"
               />
-              <Slider
-                style={styles.slider}
-                minimumValue={product.minSellingPrice}
-                maximumValue={product.maxSellingPrice}
-                value={sellingPrice}
-                onValueChange={setSellingPrice}
-                minimumTrackTintColor={theme.colors.primary}
-                maximumTrackTintColor={theme.colors.border}
-                thumbTintColor={theme.colors.primary}
-              />
+              <View style={styles.sliderContainer}>
+                <Slider
+                  style={styles.slider}
+                  minimumValue={product.minSellingPrice}
+                  maximumValue={product.maxSellingPrice}
+                  value={sellingPrice}
+                  step={250}
+                  onValueChange={(value) => {
+                    const roundedValue = Math.round(value / 250) * 250;
+                    setSellingPrice(roundedValue);
+                  }}
+                  minimumTrackTintColor={theme.colors.primary}
+                  maximumTrackTintColor={theme.colors.border}
+                  thumbTintColor={theme.colors.primary}
+                />
+              </View>
               <View style={styles.priceRange}>
                 <Text style={styles.rangeText}>
-                  {product.minSellingPrice.toLocaleString('ar-IQ')}
+                  {Math.round(product.maxSellingPrice).toLocaleString('ar-IQ')}
                 </Text>
                 <Text style={styles.rangeText}>
-                  {product.maxSellingPrice.toLocaleString('ar-IQ')}
+                  {Math.round(product.minSellingPrice).toLocaleString('ar-IQ')}
                 </Text>
               </View>
               
               {/* Profit Display */}
               <View style={styles.profitContainer}>
-                <Text style={styles.profitLabel}>الربح المتوقع:</Text>
                 <Text style={styles.profitValue}>
                   {profit.toLocaleString('ar-IQ')} د.ع
                 </Text>
+                <Text style={styles.profitLabel}>الربح المتوقع</Text>
               </View>
             </View>
 
