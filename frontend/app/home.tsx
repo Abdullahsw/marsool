@@ -54,7 +54,7 @@ export default function HomeScreen() {
   };
 
   const handleProductPress = (product: any) => {
-    Alert.alert(product.name, 'سيتم فتح تفاصيل المنتج');
+    router.push(`/product/${product.id}`);
   };
 
   const handleAddToCart = (product: any) => {
