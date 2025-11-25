@@ -41,6 +41,18 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         
+        // Filter by category in code (if categoryId is provided and not 'all')
+        if (categoryId && categoryId !== 'all') {
+          // Check if product belongs to selected category
+          const productCategories = data.categories || [];
+          const productCategoryId = data.categoryId || '';
+          
+          // Skip if doesn't match category
+          if (!productCategories.includes(categoryId) && productCategoryId !== categoryId) {
+            return;
+          }
+        }
+        
         // Handle multi-language name
         let productName = '';
         if (typeof data.name === 'string') {
@@ -100,7 +112,16 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
         });
       });
 
-      setProducts(productsData);
+      // Sort by creation date and limit results
+      productsData.sort((a, b) => {
+        // Since we can't sort by createdAt in query, we'll show all for now
+        return 0;
+      });
+      
+      // Apply limit
+      const limitedProducts = productsData.slice(0, limitCount);
+
+      setProducts(limitedProducts);
     } catch (err: any) {
       console.error('Error fetching products:', err);
       setError(err.message || 'حدث خطأ في جلب المنتجات');
