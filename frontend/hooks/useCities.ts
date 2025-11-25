@@ -28,8 +28,8 @@ export const useCities = () => {
       console.log('👤 Current user:', auth.currentUser?.uid);
       console.log('👤 Is authenticated:', !!auth.currentUser);
       
-      // Fetch from companyProfile document
-      const docRef = doc(db, 'companyProfile', 'CpsSlBVTcMu4ivxsbvvt');
+      // Fetch from deliveryMappings document
+      const docRef = doc(db, 'deliveryMappings', 'CpsSlBVTcMu4ivxsbvvt');
       const docSnap = await getDoc(docRef);
 
       console.log('📄 Document exists:', docSnap.exists());
