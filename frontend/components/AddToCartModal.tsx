@@ -191,6 +191,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                   horizontal 
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.variantsContainer}
+                  style={{ flexGrow: 0 }}
                 >
                   {product.variants.map((variant, index) => (
                     <TouchableOpacity
@@ -198,18 +199,24 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                       style={[
                         styles.colorVariantCard,
                         selectedVariantIndex === index && styles.colorVariantSelected,
+                        { marginLeft: index === 0 ? 0 : theme.spacing.sm }
                       ]}
                       onPress={() => {
+                        console.log('🎨 Color selected:', variant.name);
                         setSelectedVariantIndex(index);
                         setSelectedSizeIndex(undefined); // Reset size when color changes
                       }}
                     >
-                      {variant.imageUrl && (
+                      {variant.imageUrl ? (
                         <Image
                           source={{ uri: variant.imageUrl }}
                           style={styles.colorImage}
                           resizeMode="cover"
                         />
+                      ) : (
+                        <View style={[styles.colorImage, { backgroundColor: theme.colors.backgroundGray, justifyContent: 'center', alignItems: 'center' }]}>
+                          <Text style={{ fontSize: 40 }}>🎨</Text>
+                        </View>
                       )}
                       <Text style={styles.colorName}>{variant.name}</Text>
                     </TouchableOpacity>
