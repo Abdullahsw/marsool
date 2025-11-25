@@ -232,27 +232,20 @@ export default function ProductDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-forward" size={24} color={theme.colors.text} />
-        </TouchableOpacity>
-        <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.headerIcon} onPress={handleShare}>
-            <Ionicons name="share-outline" size={24} color={theme.colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerIcon}>
-            <Ionicons name="heart-outline" size={24} color={theme.colors.text} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      {/* Keep Main Header and TabBar visible */}
+      <Header
+        title="تفاصيل المنتج"
+        onMenuPress={() => Alert.alert('القائمة', 'القائمة')}
+        onNotificationPress={() => Alert.alert('الإشعارات', 'الإشعارات')}
+        onAddPress={() => Alert.alert('إضافة', 'إضافة')}
+      />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Carousel */}
         <View style={styles.carouselContainer}>
           <ImageCarousel images={product.images} />
           
-          {/* Action Buttons Overlay */}
+          {/* Action Buttons Overlay - Vertical on Left */}
           <View style={styles.imageActions}>
             <TouchableOpacity
               style={styles.actionButton}
@@ -279,10 +272,15 @@ export default function ProductDetailsScreen() {
               <Ionicons name="download" size={20} color={theme.colors.white} />
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.actionButton} onPress={handleCopyDescription}>
-              <Ionicons name="copy" size={20} color={theme.colors.white} />
+            <TouchableOpacity style={styles.actionButton}>
+              <Ionicons name="bookmark-outline" size={20} color={theme.colors.white} />
             </TouchableOpacity>
           </View>
+          
+          {/* Back Button */}
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <Ionicons name="arrow-forward" size={24} color={theme.colors.white} />
+          </TouchableOpacity>
         </View>
 
         {/* Product Info */}
