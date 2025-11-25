@@ -22,17 +22,31 @@ export const Banner: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const nextIndex = (currentIndex + 1) % banners.length;
-      setCurrentIndex(nextIndex);
-      scrollViewRef.current?.scrollTo({
-        x: nextIndex * width,
-        animated: true,
-      });
-    }, 4000);
+    if (banners.length > 0) {
+      const interval = setInterval(() => {
+        const nextIndex = (currentIndex + 1) % banners.length;
+        setCurrentIndex(nextIndex);
+        scrollViewRef.current?.scrollTo({
+          x: nextIndex * (width - theme.spacing.xl),
+          animated: true,
+        });
+      }, 4000);
 
-    return () => clearInterval(interval);
-  }, [currentIndex]);
+      return () => clearInterval(interval);
+    }
+  }, [currentIndex, banners.length]);
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
+
+  if (banners.length === 0) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -43,7 +57,7 @@ export const Banner: React.FC = () => {
         showsHorizontalScrollIndicator={false}
         onScroll={(event) => {
           const slideIndex = Math.round(
-            event.nativeEvent.contentOffset.x / width
+            event.nativeEvent.contentOffset.x / (width - theme.spacing.xl)
           );
           setCurrentIndex(slideIndex);
         }}
@@ -52,35 +66,49 @@ export const Banner: React.FC = () => {
         {banners.map((banner) => (
           <TouchableOpacity
             key={banner.id}
-            style={[styles.banner, { backgroundColor: banner.color + '20' }]}
+            style={[styles.banner, { backgroundColor: (banner.color || theme.colors.primary) + '20' }]}
             activeOpacity={0.9}
           >
-            <View style={styles.content}>
-              <View style={[styles.iconContainer, { backgroundColor: banner.color }]}>
-                <Ionicons name={banner.icon} size={40} color={theme.colors.white} />
+            {banner.imageUrl ? (
+              <Image
+                source={{ uri: banner.imageUrl }}
+                style={styles.bannerImage}
+                resizeMode="cover"
+              />
+            ) : (
+              <View style={styles.content}>
+                <View style={[styles.iconContainer, { backgroundColor: banner.color || theme.colors.primary }]}>
+                  <Ionicons 
+                    name={(banner.icon as any) || 'rocket'} 
+                    size={40} 
+                    color={theme.colors.white} 
+                  />
+                </View>
+                
+                <View style={styles.textContainer}>
+                  <Text style={styles.title}>{banner.title}</Text>
+                  <Text style={styles.subtitle}>{banner.subtitle}</Text>
+                </View>
               </View>
-              
-              <View style={styles.textContainer}>
-                <Text style={styles.title}>{banner.title}</Text>
-                <Text style={styles.subtitle}>{banner.subtitle}</Text>
-              </View>
-            </View>
+            )}
           </TouchableOpacity>
         ))}
       </ScrollView>
 
       {/* Pagination Dots */}
-      <View style={styles.pagination}>
-        {banners.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              index === currentIndex && styles.activeDot,
-            ]}
-          />
-        ))}
-      </View>
+      {banners.length > 1 && (
+        <View style={styles.pagination}>
+          {banners.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.dot,
+                index === currentIndex && styles.activeDot,
+              ]}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 };
