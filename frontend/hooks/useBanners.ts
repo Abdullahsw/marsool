@@ -38,10 +38,27 @@ export const useBanners = () => {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        
+        // Handle multi-language title
+        let bannerTitle = '';
+        if (typeof data.title === 'string') {
+          bannerTitle = data.title;
+        } else if (data.title && typeof data.title === 'object') {
+          bannerTitle = data.title.ar || data.title.en || data.title.ku || '';
+        }
+        
+        // Handle multi-language subtitle
+        let bannerSubtitle = '';
+        if (typeof data.subtitle === 'string') {
+          bannerSubtitle = data.subtitle;
+        } else if (data.subtitle && typeof data.subtitle === 'object') {
+          bannerSubtitle = data.subtitle.ar || data.subtitle.en || data.subtitle.ku || '';
+        }
+        
         bannersData.push({
           id: doc.id,
-          title: data.title || '',
-          subtitle: data.subtitle || '',
+          title: bannerTitle,
+          subtitle: bannerSubtitle,
           imageUrl: data.imageUrl,
           icon: data.icon,
           color: data.color || '#6B4CE6',
