@@ -16,6 +16,8 @@ interface ProductCardProps {
   wholesalePrice: number;
   tags?: string[];
   status?: string;
+  statusBgColor?: string;
+  statusTextColor?: string;
   onPress: () => void;
   onAddToCart: () => void;
   onToggleFavorite?: () => void;
