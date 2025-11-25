@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from typing import List
 import uuid
 from datetime import datetime
+from app.api.alwaseet import router as alwaseet_router
 
 
 ROOT_DIR = Path(__file__).parent
