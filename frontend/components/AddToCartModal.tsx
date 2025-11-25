@@ -9,10 +9,14 @@ import {
   TextInput,
   Alert,
   Image,
+  I18nManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { theme } from '../config/theme';
+
+// Detect if RTL is enabled
+const isRTL = I18nManager.isRTL;
 
 interface ColorVariant {
   id: string;
