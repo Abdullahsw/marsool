@@ -217,4 +217,40 @@ const styles = StyleSheet.create({
   productWrapper: {
     width: '48%',
   },
+  loadingContainer: {
+    paddingVertical: theme.spacing.xl,
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: theme.spacing.sm,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.textSecondary,
+  },
+  errorContainer: {
+    paddingVertical: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.lg,
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: theme.fontSize.md,
+    color: theme.colors.error,
+    textAlign: 'center',
+  },
+  emptyContainer: {
+    paddingVertical: theme.spacing.xxl,
+    paddingHorizontal: theme.spacing.lg,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: theme.fontSize.lg,
+    fontWeight: theme.fontWeight.semibold,
+    color: theme.colors.text,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  emptySubtext: {
+    fontSize: theme.fontSize.md,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+  },
 });
