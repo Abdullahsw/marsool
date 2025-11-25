@@ -211,7 +211,10 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                       style={[
                         styles.colorVariantCard,
                         selectedVariantIndex === index && styles.colorVariantSelected,
-                        { marginLeft: index === 0 ? 0 : theme.spacing.sm }
+                        { 
+                          marginLeft: isRTL ? (index === 0 ? 0 : theme.spacing.sm) : 0,
+                          marginRight: !isRTL ? (index === 0 ? 0 : theme.spacing.sm) : 0
+                        }
                       ]}
                       onPress={() => {
                         console.log('🎨 Color selected:', variant.name);
