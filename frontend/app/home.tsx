@@ -61,13 +61,29 @@ export default function HomeScreen() {
     Alert.alert('تمت الإضافة', `تمت إضافة ${product.name} إلى السلة`);
   };
 
+  const handleCategoryPress = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+  };
+
   const renderProduct = ({ item }: any) => (
     <View style={styles.productWrapper}>
       <ProductCard
-        {...item}
+        id={item.id}
+        name={item.name}
+        image={item.imageUrl}
+        wholesalePrice={item.wholesalePrice}
+        tags={item.tags}
+        status={item.status}
         onPress={() => handleProductPress(item)}
         onAddToCart={() => handleAddToCart(item)}
       />
+    </View>
+  );
+
+  const renderEmptyProducts = () => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>لا توجد منتجات متاحة حالياً</Text>
+      <Text style={styles.emptySubtext}>سنضيف المزيد قريباً!</Text>
     </View>
   );
 
@@ -85,6 +101,14 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[theme.colors.primary]}
+            tintColor={theme.colors.primary}
+          />
+        }
       >
         {/* Search Bar */}
         <SearchBar
@@ -99,35 +123,54 @@ export default function HomeScreen() {
         {/* Categories */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>الأقسام</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoriesContainer}
-          >
-            {categories.map((category) => (
-              <CategoryCard
-                key={category.id}
-                icon={category.icon}
-                title={category.name}
-                color={category.color}
-                onPress={() => Alert.alert(category.name, 'تصفح قسم ' + category.name)}
-              />
-            ))}
-          </ScrollView>
+          {categoriesLoading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color={theme.colors.primary} />
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoriesContainer}
+            >
+              {categories.map((category) => (
+                <CategoryCard
+                  key={category.id}
+                  icon={category.icon as any}
+                  title={category.name}
+                  color={category.color}
+                  onPress={() => handleCategoryPress(category.id)}
+                />
+              ))}
+            </ScrollView>
+          )}
         </View>
 
         {/* Products */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>المنتجات المميزة</Text>
-          <FlatList
-            data={mockProducts}
-            renderItem={renderProduct}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            scrollEnabled={false}
-            columnWrapperStyle={styles.productRow}
-            contentContainerStyle={styles.productsContainer}
-          />
+          {productsLoading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={theme.colors.primary} />
+              <Text style={styles.loadingText}>جاري تحميل المنتجات...</Text>
+            </View>
+          ) : error ? (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          ) : products.length === 0 ? (
+            renderEmptyProducts()
+          ) : (
+            <FlatList
+              data={products}
+              renderItem={renderProduct}
+              keyExtractor={(item) => item.id}
+              numColumns={2}
+              scrollEnabled={false}
+              columnWrapperStyle={styles.productRow}
+              contentContainerStyle={styles.productsContainer}
+            />
+          )}
         </View>
 
         {/* Bottom Spacing */}
