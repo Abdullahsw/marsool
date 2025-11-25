@@ -29,21 +29,11 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
       setLoading(true);
       setError(null);
 
-      let q = query(
+      // Simplified query without compound index requirement
+      const q = query(
         collection(db, 'products'),
-        orderBy('createdAt', 'desc'),
-        limit(limitCount)
+        limit(100) // Get more products and filter in code
       );
-
-      // Filter by category if provided
-      if (categoryId && categoryId !== 'all') {
-        q = query(
-          collection(db, 'products'),
-          where('categoryId', '==', categoryId),
-          orderBy('createdAt', 'desc'),
-          limit(limitCount)
-        );
-      }
 
       const querySnapshot = await getDocs(q);
       const productsData: Product[] = [];
