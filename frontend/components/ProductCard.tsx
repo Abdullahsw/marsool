@@ -36,11 +36,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: image }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={[styles.image, styles.placeholderImage]}>
+            <Ionicons name="image-outline" size={40} color={theme.colors.textLight} />
+          </View>
+        )}
         
         {/* Favorite Button */}
         <TouchableOpacity
