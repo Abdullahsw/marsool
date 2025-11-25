@@ -19,6 +19,7 @@ import { CategoryCard } from '../components/CategoryCard';
 import { ProductCard } from '../components/ProductCard';
 import { TabBar } from '../components/TabBar';
 import { WhatsAppButton } from '../components/WhatsAppButton';
+import { AddToCartModal } from '../components/AddToCartModal';
 import { useProducts } from '../hooks/useProducts';
 import { useCategories } from '../hooks/useCategories';
 
@@ -27,6 +28,8 @@ export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
   
   const { categories, loading: categoriesLoading } = useCategories();
   const { products, loading: productsLoading, error, refetch } = useProducts(selectedCategory, 20);
