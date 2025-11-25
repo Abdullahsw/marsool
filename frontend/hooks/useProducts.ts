@@ -50,9 +50,26 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        
+        // Handle multi-language name
+        let productName = '';
+        if (typeof data.name === 'string') {
+          productName = data.name;
+        } else if (data.name && typeof data.name === 'object') {
+          productName = data.name.ar || data.name.en || data.name.ku || '';
+        }
+        
+        // Handle multi-language description
+        let productDescription = '';
+        if (typeof data.description === 'string') {
+          productDescription = data.description;
+        } else if (data.description && typeof data.description === 'object') {
+          productDescription = data.description.ar || data.description.en || data.description.ku || '';
+        }
+        
         productsData.push({
           id: doc.id,
-          name: data.name || '',
+          name: productName,
           imageUrl: data.imageUrl || data.images?.[0] || '',
           wholesalePrice: data.wholesalePrice || 0,
           tags: data.tags || [],
@@ -60,7 +77,7 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           category: data.category,
           stock: data.stock || 0,
           minOrder: data.minOrder || 1,
-          description: data.description || '',
+          description: productDescription,
         });
       });
 
