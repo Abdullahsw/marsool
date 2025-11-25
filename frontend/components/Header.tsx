@@ -125,19 +125,19 @@ const styles = StyleSheet.create({
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.text,
   },
-  balanceContainer: {
+  profitContainer: {
     flexDirection: 'row-reverse',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: theme.colors.success + '20',
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
-    borderRadius: theme.borderRadius.md,
+    gap: 3,
+    backgroundColor: theme.colors.backgroundGray,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: theme.borderRadius.sm,
   },
-  balanceText: {
-    fontSize: theme.fontSize.sm,
+  profitText: {
+    fontSize: 11,
     fontWeight: theme.fontWeight.semibold,
-    color: theme.colors.success,
+    color: theme.colors.text,
   },
   logoContainer: {
     width: 36,
