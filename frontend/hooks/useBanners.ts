@@ -27,9 +27,9 @@ export const useBanners = () => {
       setLoading(true);
       setError(null);
 
+      // Simplified query to avoid index requirement
       const q = query(
         collection(db, 'banners'),
-        where('active', '==', true),
         orderBy('order', 'asc')
       );
 
