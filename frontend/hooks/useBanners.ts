@@ -39,6 +39,11 @@ export const useBanners = () => {
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         
+        // Skip inactive banners
+        if (data.active === false) {
+          return;
+        }
+        
         // Handle multi-language title
         let bannerTitle = '';
         if (typeof data.title === 'string') {
