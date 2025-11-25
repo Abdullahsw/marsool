@@ -8,6 +8,7 @@ export interface Category {
   icon: string;
   color: string;
   order?: number;
+  imageUrl?: string;
 }
 
 export const useCategories = () => {
