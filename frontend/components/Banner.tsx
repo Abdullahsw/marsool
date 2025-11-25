@@ -117,12 +117,21 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: theme.spacing.sm,
   },
+  loadingContainer: {
+    height: BANNER_HEIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   banner: {
     width: width - theme.spacing.xl,
     height: BANNER_HEIGHT,
     marginHorizontal: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
+  },
+  bannerImage: {
+    width: '100%',
+    height: '100%',
   },
   content: {
     flex: 1,
