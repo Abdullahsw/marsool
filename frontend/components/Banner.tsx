@@ -57,7 +57,7 @@ export const Banner: React.FC = () => {
         showsHorizontalScrollIndicator={false}
         onScroll={(event) => {
           const slideIndex = Math.round(
-            event.nativeEvent.contentOffset.x / (width - theme.spacing.xl)
+            event.nativeEvent.contentOffset.x / width
           );
           setCurrentIndex(slideIndex);
         }}
