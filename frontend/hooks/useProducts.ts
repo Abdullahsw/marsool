@@ -9,6 +9,8 @@ export interface Product {
   wholesalePrice: number;
   tags?: string[];
   status?: string;
+  statusBgColor?: string;
+  statusTextColor?: string;
   category?: string;
   stock?: number;
   minOrder?: number;
