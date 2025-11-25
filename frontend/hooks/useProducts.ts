@@ -141,6 +141,8 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           wholesalePrice: data.wholesalePrice || 0,
           tags: data.tags || [],
           status: statusText,
+          statusBgColor: statusBgColor,
+          statusTextColor: statusTextColor,
           category: data.category,
           stock: data.quantity || data.stock || 0, // Support both quantity and stock fields
           minOrder: data.minOrder || data.minOrderQuantity || 1,
