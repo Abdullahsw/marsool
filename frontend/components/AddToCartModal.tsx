@@ -67,12 +67,17 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   // Debug log
   useEffect(() => {
-    console.log('🛒 AddToCartModal - Product Data:', {
-      hasVariants: !!product.variants,
-      variantsCount: product.variants?.length || 0,
-      variants: product.variants,
-    });
-  }, [product]);
+    console.log('🛒 AddToCartModal Opened!');
+    console.log('🛒 Product:', product);
+    console.log('🛒 Has Variants:', !!product.variants);
+    console.log('🛒 Variants Count:', product.variants?.length || 0);
+    if (product.variants && product.variants.length > 0) {
+      console.log('🛒 First Variant:', product.variants[0]);
+      console.log('🛒 All Variants:', JSON.stringify(product.variants, null, 2));
+    } else {
+      console.log('❌ NO VARIANTS FOUND!');
+    }
+  }, [product, visible]);
 
   // Get available sizes based on selected color
   const availableSizes = useMemo(() => {
