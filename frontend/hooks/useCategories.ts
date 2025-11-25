@@ -36,9 +36,19 @@ export const useCategories = () => {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        
+        // Handle multi-language name
+        let categoryName = '';
+        if (typeof data.name === 'string') {
+          categoryName = data.name;
+        } else if (data.name && typeof data.name === 'object') {
+          // Try to get Arabic name first, then English, then Kurdish
+          categoryName = data.name.ar || data.name.en || data.name.ku || '';
+        }
+        
         categoriesData.push({
           id: doc.id,
-          name: data.name || '',
+          name: categoryName,
           icon: data.icon || 'cube',
           color: data.color || '#6B4CE6',
           order: data.order || 0,
