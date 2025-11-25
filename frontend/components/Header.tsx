@@ -45,12 +45,21 @@ export const Header: React.FC<HeaderProps> = ({
           <Text style={styles.title}>{title}</Text>
         </View>
 
-        {/* Right Side - Balance, Points, Logo */}
+        {/* Right Side - Profits, Pending, Logo */}
         <View style={styles.rightSection}>
-          <View style={styles.balanceContainer}>
-            <Ionicons name="wallet" size={16} color={theme.colors.success} />
-            <Text style={styles.balanceText}>
-              {(trader?.realizedProfits || 0).toLocaleString('ar-IQ')} د.ع
+          {/* Pending Profits - Hourglass */}
+          <View style={styles.profitContainer}>
+            <Ionicons name="hourglass" size={14} color={theme.colors.warning} />
+            <Text style={styles.profitText}>
+              {(trader?.pendingProfits || 0).toLocaleString('ar-IQ')}
+            </Text>
+          </View>
+          
+          {/* Realized Profits - Checkmark */}
+          <View style={styles.profitContainer}>
+            <Ionicons name="checkmark-circle" size={14} color={theme.colors.success} />
+            <Text style={styles.profitText}>
+              {(trader?.realizedProfits || 0).toLocaleString('ar-IQ')}
             </Text>
           </View>
           
