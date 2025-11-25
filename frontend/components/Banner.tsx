@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   banner: {
-    width: width - theme.spacing.xl,
+    width: width - (theme.spacing.md * 2),
     height: BANNER_HEIGHT,
     marginHorizontal: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
