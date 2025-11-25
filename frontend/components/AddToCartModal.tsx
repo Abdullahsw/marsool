@@ -405,8 +405,7 @@ const styles = StyleSheet.create({
   },
   variantsContainer: {
     flexDirection: 'row-reverse',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
+    paddingRight: theme.spacing.sm,
   },
   variantButton: {
     paddingHorizontal: theme.spacing.md,
