@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException, Query
-from typing import List, Dict, Any
+from fastapi import APIRouter, HTTPException, Query, Header
+from typing import List, Dict, Any, Optional
 import requests
 import os
 from dotenv import load_dotenv
@@ -10,24 +10,23 @@ router = APIRouter(prefix="/api/alwaseet", tags=["alwaseet"])
 
 # Alwaseet API Configuration
 ALWASEET_BASE_URL = "https://api.alwaseet-iq.net/v1/merchant"
-ALWASEET_USERNAME = os.getenv("ALWASEET_USERNAME", "")
-ALWASEET_PASSWORD = os.getenv("ALWASEET_PASSWORD", "")
 
-# Cache for token
-_token_cache = {"token": None}
+# Cache for token (keyed by username)
+_token_cache: Dict[str, str] = {}
 
 
-def get_alwaseet_token() -> str:
+def get_alwaseet_token(username: str, password: str) -> str:
     """Get or refresh Alwaseet API token"""
-    if _token_cache["token"]:
-        return _token_cache["token"]
+    # Check cache first
+    if username in _token_cache:
+        return _token_cache[username]
     
     try:
         response = requests.post(
             f"{ALWASEET_BASE_URL}/login",
             data={
-                "username": ALWASEET_USERNAME,
-                "password": ALWASEET_PASSWORD
+                "username": username,
+                "password": password
             },
             timeout=10
         )
@@ -35,8 +34,8 @@ def get_alwaseet_token() -> str:
         data = response.json()
         
         if data.get("status") and data.get("data", {}).get("token"):
-            _token_cache["token"] = data["data"]["token"]
-            return _token_cache["token"]
+            _token_cache[username] = data["data"]["token"]
+            return _token_cache[username]
         else:
             raise HTTPException(
                 status_code=401,
