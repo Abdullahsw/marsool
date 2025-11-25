@@ -342,8 +342,8 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
           <TouchableOpacity style={styles.addButton} onPress={handleAddToCart}>
             <Text style={styles.addButtonText}>تأكيد الإضافة</Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   );
 };
