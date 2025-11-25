@@ -407,6 +407,9 @@ export default function ProductDetailsScreen() {
         product={product}
         onAddToCart={handleAddToCart}
       />
+
+      {/* Bottom Tab Bar */}
+      <TabBar activeTab="products" onTabPress={() => {}} />
     </SafeAreaView>
   );
 }
