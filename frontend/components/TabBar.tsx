@@ -32,15 +32,24 @@ export const TabBar: React.FC<TabBarProps> = ({
   const router = useRouter();
   const cart = useCart();
   const cartItemsCount = cart.getTotalItems();
+  const handleTabPress = (tab: TabItem) => {
+    if (tab.route) {
+      router.push(tab.route);
+    }
+    onTabPress?.(tab.id);
+  };
+
   return (
     <View style={styles.container}>
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
+        const badge = tab.id === 'cart' ? cartItemsCount : 0;
+        
         return (
           <TouchableOpacity
             key={tab.id}
             style={styles.tab}
-            onPress={() => onTabPress?.(tab.id)}
+            onPress={() => handleTabPress(tab)}
             activeOpacity={0.7}
           >
             <View style={styles.iconContainer}>
@@ -49,9 +58,9 @@ export const TabBar: React.FC<TabBarProps> = ({
                 size={24}
                 color={isActive ? theme.colors.primary : theme.colors.textLight}
               />
-              {tab.badge && tab.badge > 0 && (
+              {badge > 0 && (
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{tab.badge}</Text>
+                  <Text style={styles.badgeText}>{badge}</Text>
                 </View>
               )}
             </View>
