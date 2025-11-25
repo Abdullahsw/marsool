@@ -116,7 +116,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
             <View style={styles.priceContainer}>
               <Text style={styles.priceLabel}>سعر الجملة:</Text>
               <Text style={styles.wholesalePrice}>
-                {product.wholesalePrice.toLocaleString('ar-IQ')} د.ع
+                {Math.round(product.wholesalePrice).toLocaleString('ar-IQ')} د.ع
               </Text>
               <View style={styles.statusBadge}>
                 <Text style={styles.statusText}>متوفر</Text>
