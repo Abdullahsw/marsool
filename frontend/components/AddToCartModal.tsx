@@ -423,8 +423,9 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   variantsContainer: {
-    flexDirection: 'row-reverse',
-    paddingRight: theme.spacing.sm,
+    flexDirection: isRTL ? 'row-reverse' : 'row',
+    paddingRight: isRTL ? theme.spacing.sm : 0,
+    paddingLeft: isRTL ? 0 : theme.spacing.sm,
   },
   variantButton: {
     paddingHorizontal: theme.spacing.md,
