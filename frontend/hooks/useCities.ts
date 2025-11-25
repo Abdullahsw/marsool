@@ -21,18 +21,31 @@ export const useCities = () => {
   const fetchCities = async () => {
     try {
       setLoading(true);
+      console.log('🏙️ Fetching cities from Firebase...');
+      
       // Fetch from companyProfile document
       const docRef = doc(db, 'companyProfile', 'marsool');
       const docSnap = await getDoc(docRef);
 
+      console.log('📄 Document exists:', docSnap.exists());
+      
       if (docSnap.exists()) {
         const data = docSnap.data();
+        console.log('📦 Document data:', data);
+        console.log('🏙️ Cities array:', data.cities);
+        
         if (data.cities && Array.isArray(data.cities)) {
+          console.log('✅ Cities count:', data.cities.length);
           setCities(data.cities);
+        } else {
+          console.log('❌ No cities array found in document');
         }
+      } else {
+        console.log('❌ Document does not exist');
       }
     } catch (err: any) {
-      console.error('Error fetching cities:', err);
+      console.error('❌ Error fetching cities:', err);
+      console.error('Error details:', err.message);
       setError(err.message);
     } finally {
       setLoading(false);
