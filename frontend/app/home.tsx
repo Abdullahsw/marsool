@@ -63,7 +63,24 @@ export default function HomeScreen() {
   };
 
   const handleAddToCart = (product: any) => {
-    Alert.alert('تمت الإضافة', `تمت إضافة ${product.name} إلى السلة`);
+    // Format product data for modal
+    const formattedProduct = {
+      id: product.id,
+      name: product.name,
+      wholesalePrice: product.wholesalePrice,
+      minSellingPrice: product.minSellingPrice || product.wholesalePrice + 1000,
+      maxSellingPrice: product.maxSellingPrice || 30000,
+      stock: product.quantity || product.stock || 0,
+      maxOrderQuantity: product.maxOrderQuantity || 6,
+      variants: product.variants,
+    };
+    setSelectedProduct(formattedProduct);
+    setModalVisible(true);
+  };
+
+  const handleConfirmAddToCart = (data: any) => {
+    Alert.alert('تمت الإضافة', `تمت إضافة ${selectedProduct.name} إلى السلة`);
+    setModalVisible(false);
   };
 
   const handleCategoryPress = (categoryId: string) => {
