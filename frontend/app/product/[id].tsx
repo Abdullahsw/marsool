@@ -287,12 +287,23 @@ export default function ProductDetailsScreen() {
 
         {/* Product Info */}
         <View style={styles.infoContainer}>
-          <Text style={styles.productName}>{product.name}</Text>
+          <View style={styles.nameContainer}>
+            <TouchableOpacity
+              style={styles.copyIcon}
+              onPress={async () => {
+                await Clipboard.setStringAsync(product.name);
+                Alert.alert('تم النسخ', 'تم نسخ اسم المنتج');
+              }}
+            >
+              <Ionicons name="copy-outline" size={20} color={theme.colors.primary} />
+            </TouchableOpacity>
+            <Text style={styles.productName}>{product.name}</Text>
+          </View>
           
           <View style={styles.priceContainer}>
             <Text style={styles.priceLabel}>سعر الجملة:</Text>
             <Text style={styles.price}>
-              {product.wholesalePrice.toLocaleString('ar-IQ')} د.ع
+              {Math.round(product.wholesalePrice).toLocaleString('ar-IQ')} د.ع
             </Text>
           </View>
 
@@ -308,7 +319,18 @@ export default function ProductDetailsScreen() {
 
         {/* Description */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>الوصف</Text>
+          <View style={styles.sectionHeader}>
+            <TouchableOpacity
+              style={styles.copyIcon}
+              onPress={async () => {
+                await Clipboard.setStringAsync(product.description);
+                Alert.alert('تم النسخ', 'تم نسخ الوصف');
+              }}
+            >
+              <Ionicons name="copy-outline" size={20} color={theme.colors.primary} />
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>الوصف</Text>
+          </View>
           <Text style={styles.description}>{product.description}</Text>
         </View>
 
