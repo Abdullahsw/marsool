@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "832528016139",
+    "project_id": "marsool-1d3a8",
+    "storage_bucket": "marsool-1d3a8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832528016139:android:a51cc9f4f81c5e0530f80e",
+        "android_client_info": {
+          "package_name": "com.example.marsol_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "832528016139-kjh6oot67en7fv7vlc732d0k65qs6od0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWFZ8-AVC-3b3jhfPJmbCsdjq8tXkhc5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "832528016139-kjh6oot67en7fv7vlc732d0k65qs6od0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "832528016139-9qj50p8c713npikmtk1gn0dk48spdkb7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.marsolApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
