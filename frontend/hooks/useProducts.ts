@@ -67,13 +67,42 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           productDescription = data.description.ar || data.description.en || data.description.ku || '';
         }
         
+        // Get image URL - handle both single imageUrl and images array
+        let imageUrl = '';
+        if (data.imageUrl) {
+          imageUrl = data.imageUrl;
+        } else if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+          imageUrl = data.images[0];
+        }
+        
+        // Get status badge - use custom badge from Firebase or default based on stock
+        let statusText = '';
+        let statusBadge = data.badge; // Custom badge from Firebase (like "حصري", "جديد", etc.)
+        
+        if (statusBadge && typeof statusBadge === 'object') {
+          // Handle multi-language badge
+          statusText = statusBadge.ar || statusBadge.en || statusBadge.ku || '';
+        } else if (typeof statusBadge === 'string') {
+          statusText = statusBadge;
+        } else {
+          // Default status based on stock
+          const stock = data.stock || 0;
+          if (stock > 20) {
+            statusText = 'متوفر';
+          } else if (stock > 0) {
+            statusText = 'كمية محدودة';
+          } else {
+            statusText = 'غير متوفر';
+          }
+        }
+        
         productsData.push({
           id: doc.id,
           name: productName,
-          imageUrl: data.imageUrl || data.images?.[0] || '',
+          imageUrl: imageUrl,
           wholesalePrice: data.wholesalePrice || 0,
           tags: data.tags || [],
-          status: data.stock > 0 ? 'متوفر' : 'غير متوفر',
+          status: statusText,
           category: data.category,
           stock: data.stock || 0,
           minOrder: data.minOrder || 1,
