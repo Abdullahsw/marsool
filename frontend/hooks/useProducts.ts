@@ -69,11 +69,29 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           productDescription = data.description.ar || data.description.en || data.description.ku || '';
         }
         
-        // Get image URL - handle both single imageUrl and images array
+        // Get image URL - handle multiple formats
         let imageUrl = '';
-        if (data.imageUrl) {
+        
+        // Priority 1: Check media array (new Firebase structure)
+        if (data.media && Array.isArray(data.media) && data.media.length > 0) {
+          // Find primary image first
+          const primaryMedia = data.media.find((m: any) => m.isPrimary && m.type === 'image');
+          if (primaryMedia && primaryMedia.url) {
+            imageUrl = primaryMedia.url;
+          } else {
+            // Fallback to first image in media array
+            const firstImage = data.media.find((m: any) => m.type === 'image');
+            if (firstImage && firstImage.url) {
+              imageUrl = firstImage.url;
+            }
+          }
+        }
+        // Priority 2: Check direct imageUrl field
+        else if (data.imageUrl) {
           imageUrl = data.imageUrl;
-        } else if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+        }
+        // Priority 3: Check images array (old structure)
+        else if (data.images && Array.isArray(data.images) && data.images.length > 0) {
           imageUrl = data.images[0];
         }
         
