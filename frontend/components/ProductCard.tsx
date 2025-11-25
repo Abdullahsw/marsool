@@ -30,6 +30,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   wholesalePrice,
   tags = [],
   status = 'متوفر',
+  statusBgColor,
+  statusTextColor,
   onPress,
   onAddToCart,
   onToggleFavorite,
