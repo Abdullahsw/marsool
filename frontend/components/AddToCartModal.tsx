@@ -139,6 +139,24 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       ? availableSizes[selectedSizeIndex].value
       : undefined;
 
+    // Add to cart using context
+    cart.addToCart({
+      id: '', // Will be generated in context
+      productId: product.id,
+      name: product.name,
+      imageUrl: product.variants && selectedVariantIndex !== undefined 
+        ? product.variants[selectedVariantIndex].imageUrl || ''
+        : '',
+      wholesalePrice: currentWholesalePrice,
+      sellingPrice,
+      quantity,
+      selectedVariant: selectedVariantName,
+      selectedSize: selectedSizeValue,
+      minSellingPrice: product.minSellingPrice,
+      maxSellingPrice: product.maxSellingPrice,
+    });
+
+    // Call the callback for additional handling
     onAddToCart({
       quantity,
       sellingPrice,
@@ -153,6 +171,9 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
     setSelectedVariantIndex(undefined);
     setSelectedSizeIndex(undefined);
     onClose();
+    
+    // Show success message
+    Alert.alert('تمت الإضافة', 'تمت إضافة المنتج إلى السلة بنجاح');
   };
 
   return (
