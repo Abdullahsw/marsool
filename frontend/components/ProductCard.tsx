@@ -68,9 +68,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {status && (
           <View style={[
             styles.statusBadge,
-            status.includes('محدود') && styles.limitedBadge
+            statusBgColor && { backgroundColor: statusBgColor }
           ]}>
-            <Text style={styles.statusText}>{status}</Text>
+            <Text style={[
+              styles.statusText,
+              statusTextColor && { color: statusTextColor }
+            ]}>{status}</Text>
           </View>
         )}
       </View>
