@@ -203,6 +203,16 @@ export default function HomeScreen() {
       {/* WhatsApp Floating Button */}
       <WhatsAppButton />
 
+      {/* Add to Cart Modal */}
+      {selectedProduct && (
+        <AddToCartModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          product={selectedProduct}
+          onAddToCart={handleConfirmAddToCart}
+        />
+      )}
+
       {/* Bottom Tab Bar */}
       <TabBar activeTab={activeTab} onTabPress={setActiveTab} />
     </SafeAreaView>
