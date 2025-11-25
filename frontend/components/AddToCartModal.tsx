@@ -313,7 +313,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 </TouchableOpacity>
               </View>
               <Text style={styles.stockInfo}>
-                المتاح: {product.stock} / حد الطلب: {product.maxOrderQuantity || product.stock}
+                المتاح: {availableStock} / حد الطلب: {product.maxOrderQuantity || availableStock}
               </Text>
             </View>
           </ScrollView>
