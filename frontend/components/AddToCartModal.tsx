@@ -54,7 +54,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [selectedSize, setSelectedSize] = useState<string | undefined>();
 
   const profit = useMemo(() => {
-    return (sellingPrice - product.wholesalePrice) * quantity;
+    return Math.round((sellingPrice - product.wholesalePrice) * quantity);
   }, [sellingPrice, product.wholesalePrice, quantity]);
 
   const handleQuantityChange = (increment: boolean) => {
