@@ -478,12 +478,21 @@ const styles = StyleSheet.create({
   infoContainer: {
     padding: theme.spacing.lg,
   },
+  nameContainer: {
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-start',
+    marginBottom: theme.spacing.md,
+  },
   productName: {
+    flex: 1,
     fontSize: theme.fontSize.xxl,
     fontWeight: theme.fontWeight.bold,
     color: theme.colors.text,
     textAlign: 'right',
-    marginBottom: theme.spacing.md,
+  },
+  copyIcon: {
+    padding: theme.spacing.xs,
+    marginLeft: theme.spacing.sm,
   },
   priceContainer: {
     flexDirection: 'row-reverse',
