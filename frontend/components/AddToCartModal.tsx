@@ -100,29 +100,38 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const handleAddToCart = () => {
     // Validate variant selection if product has variants
-    if (product.variants && product.variants.length > 0 && !selectedVariant) {
+    if (product.variants && product.variants.length > 0 && selectedVariantIndex === undefined) {
       Alert.alert('تنبيه', 'الرجاء اختيار اللون');
       return;
     }
 
-    // Validate size selection if product has sizes
-    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+    // Validate size selection if available sizes exist
+    if (availableSizes.length > 0 && selectedSizeIndex === undefined) {
       Alert.alert('تنبيه', 'الرجاء اختيار القياس');
       return;
     }
 
+    const selectedVariantName = selectedVariantIndex !== undefined && product.variants
+      ? product.variants[selectedVariantIndex].name
+      : undefined;
+      
+    const selectedSizeValue = selectedSizeIndex !== undefined && availableSizes.length > 0
+      ? availableSizes[selectedSizeIndex].value
+      : undefined;
+
     onAddToCart({
       quantity,
       sellingPrice,
-      selectedVariant,
-      selectedSize,
+      selectedVariant: selectedVariantName,
+      selectedSize: selectedSizeValue,
+      wholesalePrice: currentWholesalePrice,
     });
     
     // Reset and close
     setQuantity(1);
     setSellingPrice(product.minSellingPrice);
-    setSelectedVariant(undefined);
-    setSelectedSize(undefined);
+    setSelectedVariantIndex(undefined);
+    setSelectedSizeIndex(undefined);
     onClose();
   };
 
