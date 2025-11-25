@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { theme } from '../config/theme';
+import { useCart } from '../contexts/CartContext';
 
 // Detect if RTL is enabled
 const isRTL = I18nManager.isRTL;
