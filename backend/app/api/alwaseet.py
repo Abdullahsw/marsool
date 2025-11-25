@@ -80,9 +80,13 @@ async def get_cities() -> Dict[str, Any]:
 
 
 @router.get("/regions")
-async def get_regions(city_id: int = Query(..., description="City ID")) -> Dict[str, Any]:
+async def get_regions(
+    city_id: int = Query(..., description="City ID"),
+    username: str = Header(..., alias="X-Alwaseet-Username"),
+    password: str = Header(..., alias="X-Alwaseet-Password")
+) -> Dict[str, Any]:
     """Get list of regions for a specific city from Alwaseet"""
-    token = get_alwaseet_token()
+    token = get_alwaseet_token(username, password)
     
     try:
         response = requests.get(
