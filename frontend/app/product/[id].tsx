@@ -49,6 +49,11 @@ export default function ProductDetailsScreen() {
       if (productDoc.exists()) {
         const data = productDoc.data();
         
+        console.log('🔍 Raw Firebase Data:', data);
+        console.log('🔍 variantSchema exists:', !!data.variantSchema);
+        console.log('🔍 variantSchema type:', typeof data.variantSchema);
+        console.log('🔍 variantSchema is array:', Array.isArray(data.variantSchema));
+        
         // Parse product data
         const parsedProduct = {
           id: productDoc.id,
@@ -65,6 +70,9 @@ export default function ProductDetailsScreen() {
           sizes: parseSizes(data.variantSchema),
           categories: data.categories || [],
         };
+        
+        console.log('✅ Parsed Product:', parsedProduct);
+        console.log('✅ Variants Count:', parsedProduct.variants?.length || 0);
         
         setProduct(parsedProduct);
         
