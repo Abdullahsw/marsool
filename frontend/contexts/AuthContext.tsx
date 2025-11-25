@@ -83,12 +83,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
-      // Update login history
-      const loginHistoryRef = doc(db, `traders/${userCredential.user.uid}/loginHistory/${Date.now()}`);
-      await setDoc(loginHistoryRef, {
-        timestamp: serverTimestamp(),
-        method: 'email',
-      });
+      // Update login history (silently fail if permissions issue)
+      try {
+        const loginHistoryRef = doc(db, `traders/${userCredential.user.uid}/loginHistory/${Date.now()}`);
+        await setDoc(loginHistoryRef, {
+          timestamp: serverTimestamp(),
+          method: 'email',
+        });
+      } catch (historyError) {
+        console.log('Could not update login history:', historyError);
+      }
     } catch (error: any) {
       console.error('Sign in error:', error);
       throw error;
