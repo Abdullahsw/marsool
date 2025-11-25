@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../config/theme';
 
@@ -7,6 +7,7 @@ interface CategoryCardProps {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   color: string;
+  imageUrl?: string;
   onPress: () => void;
 }
 
@@ -14,12 +15,21 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   icon,
   title,
   color,
+  imageUrl,
   onPress,
 }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
-        <Ionicons name={icon} size={32} color={color} />
+        {imageUrl ? (
+          <Image
+            source={{ uri: imageUrl }}
+            style={styles.categoryImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <Ionicons name={icon} size={32} color={color} />
+        )}
       </View>
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
