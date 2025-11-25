@@ -23,6 +23,11 @@ export const useCities = () => {
       setLoading(true);
       console.log('🏙️ Fetching cities from Firebase...');
       
+      // Check auth state
+      const { auth } = await import('../config/firebase');
+      console.log('👤 Current user:', auth.currentUser?.uid);
+      console.log('👤 Is authenticated:', !!auth.currentUser);
+      
       // Fetch from companyProfile document
       const docRef = doc(db, 'companyProfile', 'CpsSlBVTcMu4ivxsbvvt');
       const docSnap = await getDoc(docRef);
@@ -31,11 +36,13 @@ export const useCities = () => {
       
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log('📦 Document data:', data);
-        console.log('🏙️ Cities array:', data.cities);
+        console.log('📦 Document data keys:', Object.keys(data));
+        console.log('🏙️ Cities array exists:', !!data.cities);
+        console.log('🏙️ Cities is array:', Array.isArray(data.cities));
         
         if (data.cities && Array.isArray(data.cities)) {
           console.log('✅ Cities count:', data.cities.length);
+          console.log('✅ First city:', data.cities[0]);
           setCities(data.cities);
         } else {
           console.log('❌ No cities array found in document');
@@ -45,7 +52,8 @@ export const useCities = () => {
       }
     } catch (err: any) {
       console.error('❌ Error fetching cities:', err);
-      console.error('Error details:', err.message);
+      console.error('❌ Error code:', err.code);
+      console.error('❌ Error message:', err.message);
       setError(err.message);
     } finally {
       setLoading(false);
