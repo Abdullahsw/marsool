@@ -46,12 +46,17 @@ export const useCategories = () => {
           categoryName = data.name.ar || data.name.en || data.name.ku || '';
         }
         
+        // Get icon URL or use default icon name
+        const iconData = data.icon || 'cube';
+        const imageUrl = data.imageUrl || data.image || '';
+        
         categoriesData.push({
           id: doc.id,
           name: categoryName,
-          icon: data.icon || 'cube',
+          icon: iconData,
           color: data.color || '#6B4CE6',
           order: data.order || 0,
+          imageUrl: imageUrl,
         });
       });
 
