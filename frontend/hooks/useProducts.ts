@@ -95,21 +95,25 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           imageUrl = data.images[0];
         }
         
-        // Get status badge - use custom badge from Firebase or default based on stock
+        // Get status badge - use custom label/badge from Firebase or default based on stock
         let statusText = '';
-        let statusBadge = data.badge; // Custom badge from Firebase (like "حصري", "جديد", etc.)
         
-        if (statusBadge && typeof statusBadge === 'object') {
-          // Handle multi-language badge
-          statusText = statusBadge.ar || statusBadge.en || statusBadge.ku || '';
-        } else if (typeof statusBadge === 'string') {
-          statusText = statusBadge;
-        } else {
-          // Default status based on stock
-          const stock = data.stock || 0;
+        // Priority 1: Check label field (new Firebase structure)
+        if (data.label && typeof data.label === 'object') {
+          statusText = data.label.ar || data.label.en || data.label.ku || '';
+        }
+        // Priority 2: Check badge field
+        else if (data.badge && typeof data.badge === 'object') {
+          statusText = data.badge.ar || data.badge.en || data.badge.ku || '';
+        } else if (typeof data.badge === 'string') {
+          statusText = data.badge;
+        }
+        // Priority 3: Default status based on stock (quantity)
+        else {
+          const stock = data.quantity || data.stock || 0;
           if (stock > 20) {
             statusText = 'متوفر';
-          } else if (stock > 0) {
+          } else if (stock > 0 && stock <= 20) {
             statusText = 'كمية محدودة';
           } else {
             statusText = 'غير متوفر';
