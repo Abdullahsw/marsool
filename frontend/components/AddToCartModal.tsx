@@ -65,6 +65,15 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [currentWholesalePrice, setCurrentWholesalePrice] = useState(product.wholesalePrice);
   const [availableStock, setAvailableStock] = useState(product.stock);
 
+  // Debug log
+  useEffect(() => {
+    console.log('🛒 AddToCartModal - Product Data:', {
+      hasVariants: !!product.variants,
+      variantsCount: product.variants?.length || 0,
+      variants: product.variants,
+    });
+  }, [product]);
+
   // Get available sizes based on selected color
   const availableSizes = useMemo(() => {
     if (selectedVariantIndex !== undefined && product.variants) {
