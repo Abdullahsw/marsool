@@ -139,6 +139,7 @@ export default function HomeScreen() {
                   icon={category.icon as any}
                   title={category.name}
                   color={category.color}
+                  imageUrl={category.imageUrl}
                   onPress={() => handleCategoryPress(category.id)}
                 />
               ))}
