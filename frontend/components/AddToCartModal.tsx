@@ -63,6 +63,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   product,
   onAddToCart,
 }) => {
+  const cart = useCart();
   const [quantity, setQuantity] = useState(1);
   const [sellingPrice, setSellingPrice] = useState(product.minSellingPrice);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState<number | undefined>();
