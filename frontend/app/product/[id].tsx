@@ -102,28 +102,30 @@ export default function ProductDetailsScreen() {
   const parseVariants = (variantSchema: any) => {
     if (!variantSchema || !Array.isArray(variantSchema)) return undefined;
     
-    const colorVariant = variantSchema.find((v: any) => v.type === 'color');
-    if (colorVariant && colorVariant.options) {
-      return colorVariant.options.map((opt: any, index: number) => ({
-        id: opt.value || `color-${index}`,
-        name: typeof opt.label === 'object' ? (opt.label.ar || opt.label.en) : opt.label,
-        color: opt.value,
-      }));
+    // Find visual variant (colors with images)
+    const visualVariant = variantSchema.find((v: any) => v.type === 'visual');
+    
+    if (visualVariant && visualVariant.options) {
+      return visualVariant.options.map((opt: any, index: number) => {
+        const colorName = typeof opt.value === 'object' 
+          ? (opt.value.ar || opt.value.en || opt.value.ku)
+          : opt.value;
+          
+        return {
+          id: `color-${index}`,
+          name: colorName,
+          imageUrl: opt.imageUrl,
+          subProperty: opt.subProperty, // Keep subProperty for sizes
+        };
+      });
     }
     
     return undefined;
   };
 
   const parseSizes = (variantSchema: any) => {
-    if (!variantSchema || !Array.isArray(variantSchema)) return undefined;
-    
-    const sizeVariant = variantSchema.find((v: any) => v.type === 'size');
-    if (sizeVariant && sizeVariant.options) {
-      return sizeVariant.options.map((opt: any) => 
-        typeof opt.label === 'object' ? (opt.label.ar || opt.label.en) : opt.label
-      );
-    }
-    
+    // Sizes are now inside each color variant's subProperty
+    // We'll handle this dynamically in the modal
     return undefined;
   };
 
