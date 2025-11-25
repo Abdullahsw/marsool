@@ -164,55 +164,62 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               </View>
             </View>
 
-            {/* Variants Selection */}
+            {/* Color Variants Selection */}
             {product.variants && product.variants.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>اختر اللون:</Text>
-                <View style={styles.variantsContainer}>
-                  {product.variants.map((variant) => (
+                <Text style={styles.sectionTitle}>اختر لون:</Text>
+                <ScrollView 
+                  horizontal 
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.variantsContainer}
+                >
+                  {product.variants.map((variant, index) => (
                     <TouchableOpacity
-                      key={variant.id}
+                      key={index}
                       style={[
-                        styles.variantButton,
-                        selectedVariant === variant.id && styles.variantSelected,
+                        styles.colorVariantCard,
+                        selectedVariantIndex === index && styles.colorVariantSelected,
                       ]}
-                      onPress={() => setSelectedVariant(variant.id)}
+                      onPress={() => {
+                        setSelectedVariantIndex(index);
+                        setSelectedSizeIndex(undefined); // Reset size when color changes
+                      }}
                     >
-                      <Text
-                        style={[
-                          styles.variantText,
-                          selectedVariant === variant.id && styles.variantTextSelected,
-                        ]}
-                      >
-                        {variant.name}
-                      </Text>
+                      {variant.imageUrl && (
+                        <Image
+                          source={{ uri: variant.imageUrl }}
+                          style={styles.colorImage}
+                          resizeMode="cover"
+                        />
+                      )}
+                      <Text style={styles.colorName}>{variant.name}</Text>
                     </TouchableOpacity>
                   ))}
-                </View>
+                </ScrollView>
               </View>
             )}
 
-            {/* Sizes Selection */}
-            {product.sizes && product.sizes.length > 0 && (
+            {/* Sizes Selection (appears after color selection) */}
+            {selectedVariantIndex !== undefined && availableSizes.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>اختر القياس:</Text>
+                <Text style={styles.sectionTitle}>اختر قياس:</Text>
                 <View style={styles.sizesContainer}>
-                  {product.sizes.map((size) => (
+                  {availableSizes.map((size, index) => (
                     <TouchableOpacity
-                      key={size}
+                      key={index}
                       style={[
                         styles.sizeButton,
-                        selectedSize === size && styles.sizeSelected,
+                        selectedSizeIndex === index && styles.sizeSelected,
                       ]}
-                      onPress={() => setSelectedSize(size)}
+                      onPress={() => setSelectedSizeIndex(index)}
                     >
                       <Text
                         style={[
                           styles.sizeText,
-                          selectedSize === size && styles.sizeTextSelected,
+                          selectedSizeIndex === index && styles.sizeTextSelected,
                         ]}
                       >
-                        {size}
+                        {size.value}
                       </Text>
                     </TouchableOpacity>
                   ))}
