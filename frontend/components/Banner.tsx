@@ -27,7 +27,7 @@ export const Banner: React.FC = () => {
         const nextIndex = (currentIndex + 1) % banners.length;
         setCurrentIndex(nextIndex);
         scrollViewRef.current?.scrollTo({
-          x: nextIndex * (width - theme.spacing.xl),
+          x: nextIndex * width,
           animated: true,
         });
       }, 4000);
