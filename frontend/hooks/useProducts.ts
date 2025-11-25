@@ -97,16 +97,22 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           imageUrl = data.images[0];
         }
         
-        // Get status badge - use custom label/badge from Firebase or default based on stock
+        // Get status badge with colors - use custom label/badge from Firebase or default based on stock
         let statusText = '';
+        let statusBgColor = '';
+        let statusTextColor = '';
         
         // Priority 1: Check label field (new Firebase structure)
         if (data.label && typeof data.label === 'object') {
           statusText = data.label.ar || data.label.en || data.label.ku || '';
+          statusBgColor = data.backgroundColor || '';
+          statusTextColor = data.textColor || '';
         }
         // Priority 2: Check badge field
         else if (data.badge && typeof data.badge === 'object') {
           statusText = data.badge.ar || data.badge.en || data.badge.ku || '';
+          statusBgColor = data.badgeBackgroundColor || '';
+          statusTextColor = data.badgeTextColor || '';
         } else if (typeof data.badge === 'string') {
           statusText = data.badge;
         }
@@ -115,10 +121,16 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           const stock = data.quantity || data.stock || 0;
           if (stock > 20) {
             statusText = 'متوفر';
+            statusBgColor = '#10B981';
+            statusTextColor = '#FFFFFF';
           } else if (stock > 0 && stock <= 20) {
             statusText = 'كمية محدودة';
+            statusBgColor = '#F59E0B';
+            statusTextColor = '#FFFFFF';
           } else {
             statusText = 'غير متوفر';
+            statusBgColor = '#EF4444';
+            statusTextColor = '#FFFFFF';
           }
         }
         
