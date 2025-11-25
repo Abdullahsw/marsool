@@ -101,3 +101,117 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  إكمال تطبيق متجر Drop Shipping للموبايل (iOS & Android) مع نظام اختيار متغيرات المنتجات المعقدة.
+  
+  المطلوب:
+  1. إتمام نظام اختيار المتغيرات في صفحة تفاصيل المنتج (Product Details Page)
+  2. دعم المتغيرات المتداخلة (Nested Variants) مثل: اختيار اللون أولاً ثم المقاس لكل لون
+  3. عرض صور للألوان المتاحة
+  4. تحديث السعر والكمية المتوفرة بناءً على الاختيار
+  5. دعم الأسماء المترجمة (عربي، إنجليزي، كردي)
+  
+  التحسينات المطلوبة:
+  - عرض الألوان بصور واضحة (100x100)
+  - عرض المقاسات المتاحة لكل لون
+  - تحديث سعر الجملة ديناميكياً
+  - عرض الكمية المتوفرة لكل خيار
+
+frontend:
+  - task: "Advanced Product Variants - Color Selection with Images"
+    implemented: true
+    working: "pending_test"
+    file: "frontend/components/AddToCartModal.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "pending_test"
+        agent: "main"
+        comment: |
+          تم تحديث المودال لعرض الألوان بصور أكبر (100x100px).
+          تم إضافة أنماط جديدة: colorVariantCard, colorImage, colorName.
+          الآن الألوان تُعرض بشكل بطاقات مع صور واضحة.
+
+  - task: "Advanced Product Variants - Nested Size Options"
+    implemented: true
+    working: "pending_test"
+    file: "frontend/components/AddToCartModal.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "pending_test"
+        agent: "main"
+        comment: |
+          تم تحسين منطق عرض المقاسات المتداخلة.
+          عند اختيار لون، تظهر المقاسات المتاحة لهذا اللون فقط.
+          تم إضافة validation للتأكد من اختيار اللون والمقاس قبل الإضافة للسلة.
+
+  - task: "Dynamic Price and Stock Updates"
+    implemented: true
+    working: "pending_test"
+    file: "frontend/components/AddToCartModal.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "pending_test"
+        agent: "main"
+        comment: |
+          تم تحديث سعر الجملة ديناميكياً (currentWholesalePrice) بناءً على اختيار اللون والمقاس.
+          تم تحديث الكمية المتوفرة (availableStock) بناءً على الاختيار.
+          عرض الكمية في badge مع تغيير اللون (أخضر للمتوفر، أحمر لغير المتوفر).
+
+  - task: "Firebase Data Parsing - variantSchema"
+    implemented: true
+    working: "pending_test"
+    file: "frontend/app/product/[id].tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "pending_test"
+        agent: "main"
+        comment: |
+          تم تحسين دالة parseVariants لمعالجة البيانات المعقدة من Firebase.
+          إضافة دعم للأسماء المترجمة (ar/en/ku) للألوان والمقاسات.
+          تم إضافة console.log لتتبع البيانات ومساعدة في التصحيح.
+          الآن يتم parse subProperty بشكل صحيح مع جميع بيانات المقاسات.
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "Advanced Product Variants - Color Selection with Images"
+    - "Advanced Product Variants - Nested Size Options"
+    - "Dynamic Price and Stock Updates"
+    - "Firebase Data Parsing - variantSchema"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: |
+      تم إكمال تطوير نظام اختيار المتغيرات المعقدة في صفحة تفاصيل المنتج.
+      
+      التحديثات المنفذة:
+      1. ✅ تحسين parseVariants في [id].tsx لمعالجة البيانات المتداخلة
+      2. ✅ إضافة أنماط للألوان مع صور بحجم 100x100
+      3. ✅ تحديث سعر الجملة ديناميكياً حسب الاختيار
+      4. ✅ تحديث الكمية المتوفرة ديناميكياً
+      5. ✅ إضافة console.log للتصحيح
+      6. ✅ دعم الأسماء المترجمة (ar/en/ku)
+      
+      يرجى الاختبار في Expo Go:
+      - فتح صفحة منتج له variants
+      - اختيار لون (يجب أن يظهر صورة واضحة)
+      - التحقق من ظهور المقاسات
+      - اختيار مقاس والتحقق من تحديث السعر والكمية
+      - محاولة الإضافة للسلة بدون اختيار (يجب ظهور تنبيه)
