@@ -128,8 +128,8 @@ export const useProducts = (categoryId?: string, limitCount: number = 20) => {
           tags: data.tags || [],
           status: statusText,
           category: data.category,
-          stock: data.stock || 0,
-          minOrder: data.minOrder || 1,
+          stock: data.quantity || data.stock || 0, // Support both quantity and stock fields
+          minOrder: data.minOrder || data.minOrderQuantity || 1,
           description: productDescription,
         });
       });
