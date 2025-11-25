@@ -1,21 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../config/theme';
+import { useCart } from '../contexts/CartContext';
 
 interface TabItem {
   id: string;
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
-  badge?: number;
+  route?: string;
 }
 
 const tabs: TabItem[] = [
-  { id: 'home', icon: 'home', label: 'الرئيسية' },
-  { id: 'products', icon: 'cube', label: 'المنتجات' },
-  { id: 'cart', icon: 'cart', label: 'السلة', badge: 3 },
-  { id: 'orders', icon: 'document-text', label: 'الطلبات' },
-  { id: 'profile', icon: 'person', label: 'حسابي' },
+  { id: 'home', icon: 'home', label: 'الرئيسية', route: '/home' },
+  { id: 'products', icon: 'cube', label: 'المنتجات', route: '/home' },
+  { id: 'cart', icon: 'cart', label: 'السلة', route: '/cart' },
+  { id: 'orders', icon: 'document-text', label: 'الطلبات', route: '/home' },
+  { id: 'profile', icon: 'person', label: 'حسابي', route: '/home' },
 ];
 
 interface TabBarProps {
@@ -27,6 +29,9 @@ export const TabBar: React.FC<TabBarProps> = ({
   activeTab = 'home',
   onTabPress,
 }) => {
+  const router = useRouter();
+  const cart = useCart();
+  const cartItemsCount = cart.getTotalItems();
   return (
     <View style={styles.container}>
       {tabs.map((tab) => {
