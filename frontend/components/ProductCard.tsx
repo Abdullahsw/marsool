@@ -151,13 +151,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: theme.spacing.sm,
     left: theme.spacing.sm,
-    backgroundColor: theme.colors.success,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: 4,
     borderRadius: theme.borderRadius.sm,
-  },
-  limitedBadge: {
-    backgroundColor: theme.colors.error,
   },
   statusText: {
     color: theme.colors.white,
