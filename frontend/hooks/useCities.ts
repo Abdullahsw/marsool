@@ -24,7 +24,7 @@ export const useCities = () => {
       console.log('🏙️ Fetching cities from Firebase...');
       
       // Fetch from companyProfile document
-      const docRef = doc(db, 'companyProfile', 'marsool');
+      const docRef = doc(db, 'companyProfile', 'CpsSlBVTcMu4ivxsbvvt');
       const docSnap = await getDoc(docRef);
 
       console.log('📄 Document exists:', docSnap.exists());
