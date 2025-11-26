@@ -16,7 +16,7 @@ const tabs: TabItem[] = [
   { id: 'home', icon: 'home', label: 'الرئيسية', route: '/home' },
   { id: 'products', icon: 'cube', label: 'المنتجات', route: '/home' },
   { id: 'cart', icon: 'cart', label: 'السلة', route: '/cart' },
-  { id: 'orders', icon: 'document-text', label: 'الطلبات', route: '/home' },
+  { id: 'orders', icon: 'document-text', label: 'الطلبات', route: '/orders' },
   { id: 'profile', icon: 'person', label: 'حسابي', route: '/home' },
 ];
 
