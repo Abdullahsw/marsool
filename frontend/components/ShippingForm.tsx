@@ -36,17 +36,23 @@ export interface ShippingData {
 
 export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) => {
   const { cities, loading } = useCities();
+  const { company } = useDeliveryCompany();
   
   const [customerName, setCustomerName] = useState('');
   const [phone1, setPhone1] = useState('');
   const [phone2, setPhone2] = useState('');
   const [selectedCity, setSelectedCity] = useState<City | undefined>();
-  const [area, setArea] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState<Region | undefined>();
   const [landmark, setLandmark] = useState('');
   const [notes, setNotes] = useState('');
   
   const [cityModalVisible, setCityModalVisible] = useState(false);
+  const [regionModalVisible, setRegionModalVisible] = useState(false);
   const [citySearchQuery, setCitySearchQuery] = useState('');
+  const [regionSearchQuery, setRegionSearchQuery] = useState('');
+  
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [regionsLoading, setRegionsLoading] = useState(false);
 
   // Update parent whenever form changes
   React.useEffect(() => {
