@@ -121,9 +121,12 @@ async def get_regions(
 
 
 @router.get("/package-sizes")
-async def get_package_sizes() -> Dict[str, Any]:
+async def get_package_sizes(
+    username: str = Header(..., alias="X-Alwaseet-Username"),
+    password: str = Header(..., alias="X-Alwaseet-Password")
+) -> Dict[str, Any]:
     """Get list of package sizes from Alwaseet"""
-    token = get_alwaseet_token()
+    token = get_alwaseet_token(username, password)
     
     try:
         response = requests.get(
