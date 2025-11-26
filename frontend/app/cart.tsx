@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../config/theme';
 import { useCart } from '../contexts/CartContext';
+import { useOrders } from '../hooks/useOrders';
 import { Header } from '../components/Header';
 import { TabBar } from '../components/TabBar';
 import { CartItem } from '../components/CartItem';
