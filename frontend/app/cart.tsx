@@ -143,7 +143,7 @@ export default function CartScreen() {
           cityName: shippingData.city?.displayName || '',
           cityId: shippingData.city?.companyCityId || '',
           regionName: shippingData.area || '',
-          regionId: shippingData.area || '',
+          regionId: shippingData.region?.id || '', // Use region.id from selected region
           location: shippingData.landmark || '',
           notes: shippingData.notes || '',
         },
