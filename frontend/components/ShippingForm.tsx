@@ -54,18 +54,63 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
   const [regions, setRegions] = useState<Region[]>([]);
   const [regionsLoading, setRegionsLoading] = useState(false);
 
+  // Fetch regions when city is selected
+  useEffect(() => {
+    if (selectedCity && company) {
+      fetchRegions(selectedCity.companyCityId);
+    } else {
+      setRegions([]);
+      setSelectedRegion(undefined);
+    }
+  }, [selectedCity, company]);
+
   // Update parent whenever form changes
-  React.useEffect(() => {
+  useEffect(() => {
     onShippingChange({
       customerName,
       phone1,
       phone2,
       city: selectedCity,
-      area,
+      area: selectedRegion?.region_name,
       landmark,
       notes,
     });
-  }, [customerName, phone1, phone2, selectedCity, area, landmark, notes]);
+  }, [customerName, phone1, phone2, selectedCity, selectedRegion, landmark, notes]);
+
+  const fetchRegions = async (cityId: string) => {
+    if (!company) return;
+    
+    try {
+      setRegionsLoading(true);
+      console.log('🌍 Fetching regions for city:', cityId);
+      
+      const backendUrl = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || '';
+      const response = await fetch(
+        `${backendUrl}/api/alwaseet/regions?city_id=${cityId}`,
+        {
+          headers: {
+            'X-Alwaseet-Username': company.credentials.username,
+            'X-Alwaseet-Password': company.credentials.password,
+          },
+        }
+      );
+      
+      const data = await response.json();
+      
+      if (data.success && data.regions) {
+        console.log('✅ Regions loaded:', data.regions.length);
+        setRegions(data.regions);
+      } else {
+        console.error('❌ Failed to load regions:', data);
+        setRegions([]);
+      }
+    } catch (error) {
+      console.error('❌ Error fetching regions:', error);
+      setRegions([]);
+    } finally {
+      setRegionsLoading(false);
+    }
+  };
 
   const filteredCities = cities.filter((city) =>
     city.displayName.toLowerCase().includes(citySearchQuery.toLowerCase()) ||
