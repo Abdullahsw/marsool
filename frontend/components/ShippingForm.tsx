@@ -31,6 +31,7 @@ export interface ShippingData {
   phone2?: string;
   city?: City;
   area?: string;
+  region?: Region;
   landmark: string;
   notes?: string;
 }
