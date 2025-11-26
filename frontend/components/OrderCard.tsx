@@ -12,6 +12,11 @@ interface OrderCardProps {
 export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const router = useRouter();
 
+  // Safety check
+  if (!order || !order.pricing) {
+    return null;
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
