@@ -72,6 +72,11 @@ export default function CartScreen() {
       return false;
     }
 
+    if (!shippingData.area || !shippingData.area.trim()) {
+      Alert.alert('خطأ', 'الرجاء اختيار المنطقة');
+      return false;
+    }
+
     if (!shippingData.landmark.trim()) {
       Alert.alert('خطأ', 'الرجاء إدخال أقرب نقطة دالة');
       return false;
