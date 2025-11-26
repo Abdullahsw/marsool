@@ -25,6 +25,7 @@ import { Coupon } from '../hooks/useCoupons';
 export default function CartScreen() {
   const router = useRouter();
   const cart = useCart();
+  const { createOrder } = useOrders();
   
   const [shippingData, setShippingData] = useState<ShippingData>({
     customerName: '',
