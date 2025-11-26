@@ -126,8 +126,8 @@ export default function CartScreen() {
         })),
         customer: {
           name: shippingData.customerName || 'عميل',
-          phone: shippingData.phone1,
-          phone2: shippingData.phone2 || '',
+          phone: shippingData.phone1.replace('+964', ''), // Remove +964 for delivery company
+          phone2: shippingData.phone2 ? shippingData.phone2.replace('+964', '') : '',
           cityName: shippingData.city?.displayName || '',
           cityId: shippingData.city?.companyCityId || '',
           regionName: shippingData.area || '',
