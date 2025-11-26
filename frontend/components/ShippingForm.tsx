@@ -463,6 +463,10 @@ const styles = StyleSheet.create({
   selectButtonPlaceholder: {
     color: theme.colors.textLight,
   },
+  selectButtonDisabled: {
+    opacity: 0.5,
+    backgroundColor: theme.colors.backgroundGray,
+  },
   deliveryFeeInfo: {
     fontSize: theme.fontSize.sm,
     color: theme.colors.primary,
