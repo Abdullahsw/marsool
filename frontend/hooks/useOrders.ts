@@ -115,6 +115,8 @@ export const useOrders = (statusFilter?: string) => {
     if (!user) throw new Error('User not authenticated');
 
     try {
+      console.log('📝 Creating order with data:', orderData);
+      
       // Get next order number from counter
       const counterRef = doc(db, 'counters', 'orders');
       const counterSnap = await getDoc(counterRef);
@@ -123,11 +125,21 @@ export const useOrders = (statusFilter?: string) => {
       if (counterSnap.exists()) {
         orderNumber = (counterSnap.data().current || 0) + 1;
       }
+      
+      console.log('🔢 Next order number:', orderNumber);
 
-      // Update counter
-      await updateDoc(counterRef, {
-        current: orderNumber
-      });
+      // Update counter (create if doesn't exist)
+      if (counterSnap.exists()) {
+        await updateDoc(counterRef, {
+          current: orderNumber
+        });
+      } else {
+        // Create counter if it doesn't exist
+        const { setDoc } = await import('firebase/firestore');
+        await setDoc(counterRef, {
+          current: orderNumber
+        });
+      }
 
       // Create order
       const ordersRef = collection(db, 'traders', user.uid, 'orders');
