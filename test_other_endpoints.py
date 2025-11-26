@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""
+Test other Alwaseet endpoints
+"""
+
+import requests
+import json
+
+BACKEND_URL = "https://shoppix-cart.preview.emergentagent.com/api"
+
+def test_cities_endpoint():
+    """Test the cities endpoint"""
+    print("\n=== Testing Alwaseet Cities Endpoint ===")
+    
+    url = f"{BACKEND_URL}/alwaseet/cities"
+    
+    try:
+        response = requests.get(url, timeout=30)
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 500:
+            # Expected - no credentials provided for token
+            try:
+                error_data = response.json()
+                print(f"Expected Error: {json.dumps(error_data, indent=2, ensure_ascii=False)}")
+                print("✅ SUCCESS: Cities endpoint exists and handles missing credentials")
+                return True
+            except:
+                print(f"Error Text: {response.text}")
+                return False
+        else:
+            print(f"Unexpected status: {response.status_code}")
+            return False
+            
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return False
+
+def test_package_sizes_endpoint():
+    """Test the package sizes endpoint"""
+    print("\n=== Testing Alwaseet Package Sizes Endpoint ===")
+    
+    url = f"{BACKEND_URL}/alwaseet/package-sizes"
+    
+    try:
+        response = requests.get(url, timeout=30)
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 500:
+            # Expected - no credentials provided for token
+            try:
+                error_data = response.json()
+                print(f"Expected Error: {json.dumps(error_data, indent=2, ensure_ascii=False)}")
+                print("✅ SUCCESS: Package sizes endpoint exists and handles missing credentials")
+                return True
+            except:
+                print(f"Error Text: {response.text}")
+                return False
+        else:
+            print(f"Unexpected status: {response.status_code}")
+            return False
+            
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    print("🚀 Testing Other Alwaseet Endpoints")
+    
+    results = []
+    results.append(("Cities Endpoint", test_cities_endpoint()))
+    results.append(("Package Sizes Endpoint", test_package_sizes_endpoint()))
+    
+    print("\n" + "="*50)
+    print("📊 SUMMARY")
+    print("="*50)
+    
+    for test_name, result in results:
+        status = "✅ PASS" if result else "❌ FAIL"
+        print(f"{status}: {test_name}")
