@@ -109,38 +109,44 @@ export default function CartScreen() {
       setIsSubmitting(true);
       console.log('📝 Preparing order data...');
 
-      // Prepare order data
+      // Prepare order data matching Cloud Functions structure
       const orderData = {
+        traderId: cart.items[0]?.productId ? cart.items[0].productId.split('_')[0] : '', // Will be overridden by useOrders
         items: cart.items.map(item => ({
           productId: item.productId,
-          name: item.name,
+          name: typeof item.name === 'string' ? { ar: item.name } : item.name,
           imageUrl: item.imageUrl,
           wholesalePrice: item.wholesalePrice,
           sellingPrice: item.sellingPrice,
           quantity: item.quantity,
-          variant: item.selectedVariant,
-          size: item.selectedSize,
+          options: item.selectedVariant || item.selectedSize ? [{
+            name: { ar: item.selectedVariant ? 'اللون' : 'المقاس' },
+            value: { ar: item.selectedVariant || item.selectedSize || '' }
+          }] : [],
         })),
         customer: {
-          name: shippingData.customerName,
-          phone1: shippingData.phone1,
+          name: shippingData.customerName || 'عميل',
+          phone: shippingData.phone1,
           phone2: shippingData.phone2 || '',
-        },
-        shipping: {
-          city: shippingData.city?.displayName || '',
+          cityName: shippingData.city?.displayName || '',
           cityId: shippingData.city?.companyCityId || '',
-          area: shippingData.area || '',
-          landmark: shippingData.landmark,
+          regionName: shippingData.area || '',
+          regionId: shippingData.area || '',
+          location: shippingData.landmark || '',
+          notes: shippingData.notes || '',
         },
-        pricing: {
-          wholesaleTotal,
-          sellingTotal,
-          profit,
-          deliveryFee,
-          discount,
-          finalTotal,
+        delivery: {
+          status: 'unlinked',
+          status_text: 'في انتظار الربط بشركة توصيل',
+          delivery_fee: deliveryFee,
         },
-        notes: shippingData.notes || '',
+        deliveryFee: deliveryFee,
+        totalProfit: profit,
+        totalAmount: finalTotal,
+        discount: discount > 0 ? {
+          code: appliedCoupon?.id || '',
+          amount: discount,
+        } : null,
       };
 
       console.log('📦 Order Data:', JSON.stringify(orderData, null, 2));
@@ -150,8 +156,9 @@ export default function CartScreen() {
       const newOrder = await createOrder(orderData);
       console.log('✅ Order created successfully:', newOrder);
 
-      // Clear cart first
-      cart.clearCart();
+      // Clear cart after successful order creation
+      await cart.clearCart();
+      console.log('✅ Cart cleared successfully');
 
       // Show success message and redirect to orders
       Alert.alert(
@@ -159,7 +166,7 @@ export default function CartScreen() {
         `تم إنشاء الطلب رقم #${newOrder.orderNumber}\nالمبلغ الإجمالي: ${finalTotal.toLocaleString('ar-IQ')} د.ع\nربحك: ${profit.toLocaleString('ar-IQ')} د.ع`,
         [
           {
-            text: 'عرض الطلب',
+            text: 'عرض الطلبات',
             onPress: () => {
               router.push('/orders');
             },
@@ -169,7 +176,11 @@ export default function CartScreen() {
     } catch (error: any) {
       console.error('❌ Error submitting order:', error);
       console.error('❌ Error details:', error.message);
-      Alert.alert('خطأ', `حدث خطأ أثناء إرسال الطلب: ${error.message}`);
+      Alert.alert(
+        'خطأ في إنشاء الطلب',
+        `حدث خطأ أثناء إرسال الطلب:\n${error.message || 'خطأ غير معروف'}\n\nيرجى المحاولة مرة أخرى.`,
+        [{ text: 'حسناً' }]
+      );
     } finally {
       setIsSubmitting(false);
     }
