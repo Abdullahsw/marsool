@@ -88,7 +88,10 @@ export default function CartScreen() {
   };
 
   const handleSubmitOrder = async () => {
+    console.log('🔵 handleSubmitOrder called');
+    
     if (!validateForm()) {
+      console.log('❌ Form validation failed');
       return;
     }
 
@@ -99,6 +102,7 @@ export default function CartScreen() {
 
     try {
       setIsSubmitting(true);
+      console.log('📝 Preparing order data...');
 
       // Prepare order data
       const orderData = {
@@ -115,12 +119,12 @@ export default function CartScreen() {
         customer: {
           name: shippingData.customerName,
           phone1: shippingData.phone1,
-          phone2: shippingData.phone2,
+          phone2: shippingData.phone2 || '',
         },
         shipping: {
-          city: shippingData.city?.displayName,
-          cityId: shippingData.city?.companyCityId,
-          area: shippingData.area,
+          city: shippingData.city?.displayName || '',
+          cityId: shippingData.city?.companyCityId || '',
+          area: shippingData.area || '',
           landmark: shippingData.landmark,
         },
         pricing: {
@@ -131,20 +135,18 @@ export default function CartScreen() {
           discount,
           finalTotal,
         },
-        coupon: appliedCoupon ? {
-          code: appliedCoupon.code,
-          discount,
-        } : null,
-        notes: shippingData.notes,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
+        notes: shippingData.notes || '',
       };
 
-      console.log('📦 Order Data:', orderData);
+      console.log('📦 Order Data:', JSON.stringify(orderData, null, 2));
 
       // Save order to Firebase
+      console.log('💾 Saving order to Firebase...');
       const newOrder = await createOrder(orderData);
-      console.log('✅ Order created with ID:', newOrder.id);
+      console.log('✅ Order created successfully:', newOrder);
+
+      // Clear cart first
+      cart.clearCart();
 
       // Show success message and redirect to orders
       Alert.alert(
@@ -154,15 +156,15 @@ export default function CartScreen() {
           {
             text: 'عرض الطلب',
             onPress: () => {
-              cart.clearCart();
               router.push('/orders');
             },
           },
         ]
       );
-    } catch (error) {
-      console.error('Error submitting order:', error);
-      Alert.alert('خطأ', 'حدث خطأ أثناء إرسال الطلب. الرجاء المحاولة مرة أخرى.');
+    } catch (error: any) {
+      console.error('❌ Error submitting order:', error);
+      console.error('❌ Error details:', error.message);
+      Alert.alert('خطأ', `حدث خطأ أثناء إرسال الطلب: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
