@@ -54,9 +54,6 @@
           "resizeMode": "contain",
           "backgroundColor": "#6B4CE6"
         }
-      ],
-      [
-        "@react-native-firebase/app"
       ]
     ],
     "experiments": {
