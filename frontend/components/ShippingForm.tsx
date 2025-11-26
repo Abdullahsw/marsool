@@ -216,9 +216,7 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
 
       {/* Landmark */}
       <View style={styles.fieldContainer}>
-        <Text style={styles.label}>
-          أقرب نقطة دالة <Text style={styles.required}>*</Text>
-        </Text>
+        <Text style={styles.label}>أقرب نقطة دالة (اختياري)</Text>
         <TextInput
           style={styles.input}
           placeholder="مثال: قرب جامع النور"
