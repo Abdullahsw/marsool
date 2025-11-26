@@ -142,19 +142,20 @@ export default function CartScreen() {
 
       console.log('📦 Order Data:', orderData);
 
-      // TODO: Send to Firebase or API
-      // await submitOrderToFirebase(orderData);
+      // Save order to Firebase
+      const newOrder = await createOrder(orderData);
+      console.log('✅ Order created with ID:', newOrder.id);
 
-      // Show success message
+      // Show success message and redirect to orders
       Alert.alert(
         'نجح الطلب! 🎉',
-        `تم إرسال طلبك بنجاح\nالمبلغ الإجمالي: ${finalTotal.toLocaleString('ar-IQ')} د.ع\nربحك: ${profit.toLocaleString('ar-IQ')} د.ع`,
+        `تم إنشاء الطلب رقم #${newOrder.orderNumber}\nالمبلغ الإجمالي: ${finalTotal.toLocaleString('ar-IQ')} د.ع\nربحك: ${profit.toLocaleString('ar-IQ')} د.ع`,
         [
           {
-            text: 'حسناً',
+            text: 'عرض الطلب',
             onPress: () => {
               cart.clearCart();
-              router.push('/home');
+              router.push('/orders');
             },
           },
         ]
