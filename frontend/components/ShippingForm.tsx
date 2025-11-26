@@ -199,17 +199,34 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
         )}
       </View>
 
-      {/* Area */}
+      {/* Region Selection */}
       <View style={styles.fieldContainer}>
-        <Text style={styles.label}>المنطقة (اختياري)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="أدخل المنطقة"
-          placeholderTextColor={theme.colors.textLight}
-          value={area}
-          onChangeText={setArea}
-          textAlign="right"
-        />
+        <Text style={styles.label}>
+          المنطقة <Text style={styles.required}>*</Text>
+        </Text>
+        <TouchableOpacity
+          style={[styles.selectButton, !selectedCity && styles.selectButtonDisabled]}
+          onPress={() => {
+            if (selectedCity) {
+              setRegionModalVisible(true);
+            }
+          }}
+          disabled={!selectedCity}
+        >
+          <Ionicons name="chevron-down" size={20} color={theme.colors.textSecondary} />
+          <Text
+            style={[
+              styles.selectButtonText,
+              !selectedRegion && styles.selectButtonPlaceholder,
+            ]}
+          >
+            {selectedRegion ? selectedRegion.region_name : selectedCity ? 'اختر المنطقة' : 'اختر المحافظة أولاً'}
+          </Text>
+        </TouchableOpacity>
+        
+        {regionsLoading && (
+          <ActivityIndicator size="small" color={theme.colors.primary} style={{ marginTop: 8 }} />
+        )}
       </View>
 
       {/* Landmark */}
