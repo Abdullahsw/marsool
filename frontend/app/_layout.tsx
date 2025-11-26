@@ -34,6 +34,8 @@ export default function RootLayout() {
           <Stack.Screen name="auth/phone" />
           <Stack.Screen name="home" />
           <Stack.Screen name="cart" />
+          <Stack.Screen name="orders" />
+          <Stack.Screen name="order-details/[id]" />
         </Stack>
       </CartProvider>
     </AuthProvider>
