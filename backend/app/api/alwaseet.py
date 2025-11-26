@@ -49,9 +49,12 @@ def get_alwaseet_token(username: str, password: str) -> str:
 
 
 @router.get("/cities")
-async def get_cities() -> Dict[str, Any]:
+async def get_cities(
+    username: str = Header(..., alias="X-Alwaseet-Username"),
+    password: str = Header(..., alias="X-Alwaseet-Password")
+) -> Dict[str, Any]:
     """Get list of cities from Alwaseet"""
-    token = get_alwaseet_token()
+    token = get_alwaseet_token(username, password)
     
     try:
         response = requests.get(
