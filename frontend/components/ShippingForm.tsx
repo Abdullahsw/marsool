@@ -73,6 +73,7 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
       phone2,
       city: selectedCity,
       area: selectedRegion?.region_name,
+      region: selectedRegion, // Pass full region object with id
       landmark,
       notes,
     });
