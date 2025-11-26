@@ -109,6 +109,18 @@ export default function CartScreen() {
       setIsSubmitting(true);
       console.log('📝 Preparing order data...');
 
+      // Helper function to format phone for delivery company (07XXXXXXXXX format)
+      const formatPhoneForDelivery = (phone: string): string => {
+        if (!phone) return '';
+        // Remove +964 if exists
+        let cleanPhone = phone.replace('+964', '');
+        // Add 0 at the beginning if not present
+        if (!cleanPhone.startsWith('0')) {
+          cleanPhone = '0' + cleanPhone;
+        }
+        return cleanPhone; // Returns 07XXXXXXXXX (11 digits)
+      };
+
       // Prepare order data matching Cloud Functions structure
       const orderData = {
         traderId: cart.items[0]?.productId ? cart.items[0].productId.split('_')[0] : '', // Will be overridden by useOrders
@@ -126,8 +138,8 @@ export default function CartScreen() {
         })),
         customer: {
           name: shippingData.customerName || 'عميل',
-          phone: shippingData.phone1.replace('+964', ''), // Remove +964 for delivery company
-          phone2: shippingData.phone2 ? shippingData.phone2.replace('+964', '') : '',
+          phone: formatPhoneForDelivery(shippingData.phone1), // Format: 07XXXXXXXXX (11 digits)
+          phone2: formatPhoneForDelivery(shippingData.phone2 || ''),
           cityName: shippingData.city?.displayName || '',
           cityId: shippingData.city?.companyCityId || '',
           regionName: shippingData.area || '',
