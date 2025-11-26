@@ -329,6 +329,79 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
           </View>
         </View>
       </Modal>
+
+      {/* Region Selection Modal */}
+      <Modal
+        visible={regionModalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setRegionModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            {/* Modal Header */}
+            <View style={styles.modalHeader}>
+              <TouchableOpacity onPress={() => setRegionModalVisible(false)}>
+                <Ionicons name="close" size={24} color={theme.colors.text} />
+              </TouchableOpacity>
+              <Text style={styles.modalTitle}>اختر المنطقة</Text>
+            </View>
+
+            {/* Search Input */}
+            <View style={styles.searchContainer}>
+              <Ionicons name="search" size={20} color={theme.colors.textLight} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="ابحث عن المنطقة"
+                placeholderTextColor={theme.colors.textLight}
+                value={regionSearchQuery}
+                onChangeText={setRegionSearchQuery}
+                textAlign="right"
+              />
+            </View>
+
+            {/* Regions List */}
+            {regionsLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={theme.colors.primary} />
+              </View>
+            ) : (
+              <FlatList
+                data={regions.filter((region) =>
+                  region.region_name.toLowerCase().includes(regionSearchQuery.toLowerCase())
+                )}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.cityItem}
+                    onPress={() => {
+                      setSelectedRegion(item);
+                      setRegionModalVisible(false);
+                      setRegionSearchQuery('');
+                    }}
+                  >
+                    <View style={styles.cityInfo}>
+                      <Text style={styles.cityName}>{item.region_name}</Text>
+                    </View>
+                    {selectedRegion?.id === item.id && (
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={24}
+                        color={theme.colors.primary}
+                      />
+                    )}
+                  </TouchableOpacity>
+                )}
+                ListEmptyComponent={
+                  <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyText}>لم يتم العثور على نتائج</Text>
+                  </View>
+                }
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
