@@ -16,12 +16,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.marsooliq.app",
-      "googleServicesFile": "./GoogleService-Info.plist",
-      "infoPlist": {
-        "NSCameraUsageDescription": "يحتاج التطبيق إلى الوصول إلى الكاميرا لالتقاط صور المنتجات",
-        "NSPhotoLibraryUsageDescription": "يحتاج التطبيق إلى الوصول إلى معرض الصور لاختيار صور المنتجات"
-      }
+      "bundleIdentifier": "com.example.marsolApp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
