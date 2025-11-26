@@ -1,94 +1,93 @@
 <analysis>
-The user wants to build a cross-platform mobile application for their existing dropshipping website, which uses Firebase as its backend. The development process has been iterative, starting with core authentication features, moving to a complex home screen, and then a detailed product page. The previous AI engineer successfully implemented the basic structure, connected the app to Firebase, and fetched real-time data for products, categories, and banners.
+The user wants to build a cross-platform mobile application for their existing dropshipping website, which uses Firebase as its backend. The development process has been highly iterative, starting with core authentication and home screen features, then moving to a detailed product page, a complex cart/checkout flow, and an orders management system.
 
-A significant portion of the work involved debugging and refinement based on user feedback. Key challenges included handling Firebase's multi-language data objects, resolving Firestore query index requirements, fixing data structure mismatches for images and product properties, and addressing UI/UX issues, particularly for right-to-left (RTL) language support in components like the price slider.
+The trajectory shows a pattern of the AI engineer implementing large features based on detailed user specifications, followed by intensive debugging cycles. Key challenges included:
+1.  **Data Structure Complexity:** Handling nested product variants from Firestore and managing inconsistencies between old and new data schemas (e.g., in the orders collection).
+2.  **Third-Party Integration:** A major pivot was required to integrate a third-party delivery company's API (Alwaseet) for fetching shipping regions. This involved creating a new FastAPI backend endpoint to act as a secure proxy, fetching credentials from Firestore, and updating the frontend to call this new service.
+3.  **UI/UX Refinement:** Constant user feedback drove improvements, such as making modals closable on an outside tap, adding RTL support for layouts, and creating custom input components for specific regional formats (Iraqi phone numbers).
+4.  **Debugging Firestore Rules:** A recurring issue was , which required careful analysis of the user's security rules and the app's data access patterns.
 
-The most recent task involves implementing a sophisticated product variant selection system within the Add to Cart modal. This system needs to handle nested properties (e.g., color options that each have their own size options) and display them in a user-friendly way, similar to the user's website. The work was interrupted mid-implementation. The user's primary language is Arabic (العربية), and all future responses should be in Arabic.
+The most recent work focuses on fixing the checkout process, specifically the Complete Order button and the validation logic for the customer information form. The user's primary language is Arabic (العربية), and all future responses must be in Arabic.
 </analysis>
-
 <product_requirements>
-The primary goal is to create a performant and visually appealing mobile app (iOS & Android) for the dropshipping website . The app must connect to the user's existing Firebase project for all data and authentication.
+The goal is to create a performant mobile app for the dropshipping website , using its existing Firebase backend.
 
-**Key Features Implemented:**
-1.  **Authentication:**
-    *   Onboarding, Welcome, Sign In (Email/Password & Phone/OTP), Sign Up, and Forgot Password screens.
-    *   Integration with Firebase Authentication.
-2.  **Home Screen:**
-    *   A dashboard displaying a top header with user balance, a search bar, auto-sliding promotional banners, a horizontal list of product categories, and a grid of products.
-    *   A sticky bottom tab bar for navigation (Home, Products, Cart, Orders, Profile).
-    *   A floating WhatsApp button for support.
-3.  **Data Integration:**
-    *   All content (products, categories, banners, user data) is fetched in real-time from Firestore.
-    *   Handles multi-language fields (ar, en, ku) for names, descriptions, and labels.
-    *   Displays product images, prices, stock status, and custom badges from Firebase.
+**Implemented Features:**
+*   **Core:** Authentication, Home screen (banners, categories, products), and Product Detail page with a complex, nested variant selection modal.
+*   **Cart & Checkout:** A full-featured cart screen was built from a detailed specification. It includes a list of items with editable quantity and price (via a slider), a coupon section, a financial summary showing wholesale cost, sale price, and net profit, and a customer information form for shipping.
+*   **Orders Management:** A dedicated Orders screen lists all past orders, with search and filtering by status. A corresponding Order Details page shows full invoice information, including customer data with interactive actions (copy, call, WhatsApp) and a financial summary.
 
-**Current Feature in Development:**
-1.  **Product Detail Page & Variants:**
-    *   A dedicated page for each product showing an image/video carousel, description, and related products.
-    *   An Add to Cart modal for configuring the order.
-    *   **Crucially, this modal must support complex product variants**: display visual options (e.g., colors with images) and nested sub-options (e.g., sizes for each color), based on the  in the Firestore document. The price and stock should update based on the selected variant.
+**Current Development Focus:**
+The checkout process is being refined. The Complete Order button in the cart must successfully create an order, and the customer information form requires specific validation rules: province and region are mandatory, while name, secondary phone, and address details are optional. A custom input for Iraqi phone numbers is also a key requirement.
 </product_requirements>
-
 <key_technical_concepts>
-- **Framework/Platform:** Expo (React Native)
-- **Backend & Database:** Firebase (Authentication, Firestore, Cloud Storage)
-- **Navigation:**  (File-based routing)
-- **State Management:** React Context API (), React Hooks (, )
-- **UI Components:** Custom components built with , , and .
-- **Data Fetching:** Asynchronous calls to Firebase services within custom React hooks (, , ).
+- **Framework:** Expo (React Native)
+- **Backend:** Firebase (Firestore, Authentication) and a custom FastAPI proxy backend.
+- **Navigation:**  (file-based routing).
+- **State Management:** React Context API (, ) and local component state ().
+- **Data Fetching:** Custom React Hooks (, , , ) for asynchronous calls to Firestore and the FastAPI backend.
+- **External APIs:** Integration with the Alwaseet delivery company API for fetching shipping regions.
+- **Persistence:**  for persisting cart contents.
 </key_technical_concepts>
-
 <code_architecture>
-The application follows a standard Expo Router structure. All frontend code resides in the  directory.
+The project is a monorepo with a  (Expo app) and a  (FastAPI app). The backend serves as a proxy for external API calls that cannot be securely made from the client.
 
 **Directory Structure:**
 
 
 **Key File Analysis:**
 - ****:
-  - **Importance**: This is the root layout file. It wraps the entire application with the  to manage global authentication state and determines whether to show the authentication flow or the main app (home screen).
-  - **Changes**: It was created to set up the main navigation stack and context provider.
+  - **Importance**: The main screen for the shopping cart. It aggregates various components (, , ) and contains the primary Complete Order logic.
+  - **Changes**: Created to implement the cart feature. Recently modified to adjust validation logic for the shipping form, but the Complete Order button functionality is reported as broken.
 
 - ****:
-  - **Importance**: The main screen after a user logs in. It orchestrates the display of data from multiple Firebase collections.
-  - **Changes**: Initially built with dummy data. It was later heavily modified to use the custom hooks (, , ) to fetch and display real-time data. Logic was added to link  presses to the dynamic product detail route.
+  - **Importance**: A reusable form for collecting the customer's shipping information. It's a critical part of the checkout process.
+  - **Changes**: Heavily modified. It was updated to fetch cities from Firestore and then regions from the new FastAPI backend (which calls the Alwaseet API). It is currently being edited to replace the standard phone number  with the new  component.
 
 - ****:
-  - **Importance**: This is the dynamic route for displaying a single product's details. It is the most complex screen, responsible for showing product media, description, variants, and handling the Add to Cart logic via a modal.
-  - **Changes**: This file was created and has undergone extensive modifications. It fetches a single product by its ID, displays its data, and contains the  component. The modal logic was repeatedly refactored to handle price formatting, RTL slider behavior, and most recently, to support complex nested product variants.
+  - **Importance**: A new, specialized component to enforce the correct format for Iraqi phone numbers (+964 prefix, specific digit handling), as requested by the user.
+  - **Changes**: Newly created in the last work session. It is not yet fully integrated into the .
 
 - ****:
-  - **Importance**: Provides global state for user authentication. It exposes the current user, loading state, and / functions to the entire app.
-  - **Changes**: Created to handle Firebase authentication logic and share user session state across components. It was debugged to fix a Missing or insufficient permissions error by ensuring data fetching only happens after a user is properly authenticated.
+  - **Importance**: This hook is responsible for fetching the delivery company's credentials (username, password) from the  collection in Firestore.
+  - **Changes**: Created to enable a dynamic and secure way of authenticating with the Alwaseet API via the backend proxy, avoiding hardcoded secrets.
 
 - ****:
-  - **Importance**: Encapsulates the logic for fetching products from Firestore.
-  - **Changes**: Initially simple, it was modified to handle a  by simplifying the query and performing filtering on the client side. It was also updated to correctly parse the product data structure for images ( array) and stock ().
+  - **Importance**: A new FastAPI router that acts as a secure proxy. It receives requests from the frontend, logs into the Alwaseet API using credentials passed in the request body, and forwards the request to get shipping regions.
+  - **Changes**: Created to solve the problem of fetching regions from a third-party API that requires authentication, which couldn't be done securely on the client-side.
 
 - ****:
-  - **Importance**: A reusable component for displaying a product summary in a grid on the home screen.
-  - **Changes**: Updated multiple times to correctly display the primary image from the  array, show dynamic badges with their specific colors (), and display the correct stock status based on the  field.
+  - **Importance**: The main entry point for the FastAPI backend application.
+  - **Changes**: Modified to include and register the new  API router.
+
+- ****:
+    - **Importance**: Displays a list of all user orders and allows filtering by status.
+    - **Changes**: Created recently. Debugging revealed it was not displaying older orders due to a data schema mismatch. A fix was attempted but the core issue of displaying orders remains a user concern.
 </code_architecture>
-
 <pending_tasks>
-- Complete the implementation of the advanced product variants feature in the  component within .
-- Ensure the modal correctly displays nested properties (e.g., color options with images, and size options for each color).
-- The selection of variants must update the displayed price, stock availability, and image in real-time.
-- Ensure translated names for properties and options are fetched and displayed correctly.
+- **Fix Complete Order button:** The button in  is not creating the order successfully.
+- **Finalize Shipping Form:**
+    - Fully integrate the new  component into .
+    - Ensure the validation logic in  matches the user's requirements (mandatory province/region, optional name/address).
+- **Fix Orders Display:** The  screen fails to display orders correctly, especially when filtering. This is likely due to data inconsistencies between old and new orders.
 </pending_tasks>
-
 <current_work>
-The AI engineer was actively working on implementing the complex product variants feature, as requested by the user in . The user provided a detailed Firebase data structure for a product with  and a nested  containing colors and sizes.
+The AI engineer was in the middle of a multi-part fix triggered by the user's report in  that the Complete Order button was not working and that the shipping form validation was incorrect.
 
-The AI's approach was to refactor the  (defined within ) to handle this structure. The work was done in multiple steps:
-1.  The AI began rewriting the modal to handle the  ().
-2.  The user interrupted, asking why the properties weren't visible ().
-3.  The AI acknowledged the work was incomplete and continued the implementation, adding more logic to display the properties with images ().
-4.  The user again interrupted, stating the updates were not visible and asking if a restart was needed ().
+The engineer's plan was to address the form validation and input fields first, as incorrect data was likely preventing the order creation process from starting.
 
-The last action from the AI was acknowledging the work was still in progress (). The code in  is currently in a half-finished state, with the structure for variant selection being laid out but not fully functional or displayed. The immediate task is to complete this implementation so that users can select variants like Color and then a corresponding Size before adding a product to the cart.
+**The following actions were taken:**
+
+1.  **Validation Logic Update:** The validation schema in  was modified to make the customer's name and address () optional.
+
+    
+
+2.  **Custom Phone Input Creation:** A new component was created at  to handle the specific formatting rules for Iraqi phone numbers.
+
+3.  **Shipping Form Integration (In-Progress):** The engineer started editing  to replace the generic  for phone numbers with the newly created  component.
+
+The last recorded action was . The work is incomplete; the new component is not yet fully wired up within the form.
 </current_work>
-
 <optional_next_step>
-Continue editing  to complete the implementation of the , ensuring it correctly renders and manages the state for nested product variants (properties and sub-properties) as per the user's detailed requirements and provided data structure.
+Continue editing  to fully replace the standard phone number fields with the new  component and ensure its state is correctly managed by the form.
 </optional_next_step>
