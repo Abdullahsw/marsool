@@ -152,6 +152,7 @@ export const useOrders = (statusFilter?: string) => {
       const newOrder = {
         ...orderData,
         orderNumber,
+        traderId: user.uid,
         userId: user.uid,
         status: 'pending',
         statusAr: 'قيد المراجعة',
