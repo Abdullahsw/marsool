@@ -114,10 +114,10 @@ user_problem_statement: |
   4. إصلاح عرض الطلبات في صفحة Orders عند التصفية حسب الحالة
 
 frontend:
-  - task: "Advanced Product Variants - Color Selection with Images"
+  - task: "IraqiPhoneInput Component Integration"
     implemented: true
     working: "pending_test"
-    file: "frontend/components/AddToCartModal.tsx"
+    file: "frontend/components/IraqiPhoneInput.tsx, frontend/components/ShippingForm.tsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
@@ -125,14 +125,15 @@ frontend:
       - working: "pending_test"
         agent: "main"
         comment: |
-          تم تحديث المودال لعرض الألوان بصور أكبر (100x100px).
-          تم إضافة أنماط جديدة: colorVariantCard, colorImage, colorName.
-          الآن الألوان تُعرض بشكل بطاقات مع صور واضحة.
+          ✅ تم إنشاء مكون IraqiPhoneInput لإدخال أرقام الهواتف العراقية بصيغة صحيحة (+964)
+          ✅ تم دمج المكون في ShippingForm لكل من الهاتف الأول والثاني
+          ✅ يتم التحقق من أن الرقم يبدأ بـ 7 ويتكون من 10 أرقام
+          ✅ عرض رسالة مساعدة عند الإدخال الخاطئ
 
-  - task: "Advanced Product Variants - Nested Size Options"
+  - task: "Shipping Form Validation - Labels Update"
     implemented: true
     working: "pending_test"
-    file: "frontend/components/AddToCartModal.tsx"
+    file: "frontend/components/ShippingForm.tsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
@@ -140,14 +141,14 @@ frontend:
       - working: "pending_test"
         agent: "main"
         comment: |
-          تم تحسين منطق عرض المقاسات المتداخلة.
-          عند اختيار لون، تظهر المقاسات المتاحة لهذا اللون فقط.
-          تم إضافة validation للتأكد من اختيار اللون والمقاس قبل الإضافة للسلة.
+          ✅ تم تحديث تسميات الحقول لتتطابق مع منطق التحقق:
+             - الحقول الإلزامية (*): المحافظة، المنطقة، رقم الهاتف الأول
+             - الحقول الاختيارية: الاسم، رقم الهاتف الثاني، أقرب نقطة دالة، الملاحظات
 
-  - task: "Dynamic Price and Stock Updates"
+  - task: "Cart Form Validation Logic"
     implemented: true
     working: "pending_test"
-    file: "frontend/components/AddToCartModal.tsx"
+    file: "frontend/app/cart.tsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
@@ -155,14 +156,18 @@ frontend:
       - working: "pending_test"
         agent: "main"
         comment: |
-          تم تحديث سعر الجملة ديناميكياً (currentWholesalePrice) بناءً على اختيار اللون والمقاس.
-          تم تحديث الكمية المتوفرة (availableStock) بناءً على الاختيار.
-          عرض الكمية في badge مع تغيير اللون (أخضر للمتوفر، أحمر لغير المتوفر).
+          ✅ تم تحديث منطق التحقق من صحة النموذج (validateForm):
+             - phone1: إلزامي + التحقق من الصيغة العراقية (+9647XXXXXXXXX)
+             - phone2: اختياري + التحقق من الصيغة إذا تم إدخاله
+             - city: إلزامي
+             - area: إلزامي
+             - customerName, landmark, notes: اختيارية
+          ✅ إضافة رسائل خطأ واضحة بالعربية
 
-  - task: "Firebase Data Parsing - variantSchema"
+  - task: "Complete Order Button - Order Creation"
     implemented: true
     working: "pending_test"
-    file: "frontend/app/product/[id].tsx"
+    file: "frontend/app/cart.tsx, frontend/hooks/useOrders.ts"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
@@ -170,10 +175,30 @@ frontend:
       - working: "pending_test"
         agent: "main"
         comment: |
-          تم تحسين دالة parseVariants لمعالجة البيانات المعقدة من Firebase.
-          إضافة دعم للأسماء المترجمة (ar/en/ku) للألوان والمقاسات.
-          تم إضافة console.log لتتبع البيانات ومساعدة في التصحيح.
-          الآن يتم parse subProperty بشكل صحيح مع جميع بيانات المقاسات.
+          ✅ منطق إنشاء الطلب موجود ويحتوي على:
+             - التحقق من صحة النموذج
+             - إنشاء رقم طلب تلقائي من counter
+             - حفظ جميع تفاصيل الطلب في Firestore
+             - مسح السلة بعد النجاح
+             - عرض رسالة نجاح مع تفاصيل الطلب
+          ⚠️ يحتاج لاختبار فعلي للتأكد من عمله بشكل صحيح
+
+  - task: "Orders List - Filter by Status"
+    implemented: true
+    working: "pending_test"
+    file: "frontend/hooks/useOrders.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "pending_test"
+        agent: "main"
+        comment: |
+          ✅ تم إصلاح منطق بناء الـ query في useOrders:
+             - الآن يتم بناء query واحد صحيح بدلاً من محاولة تعديل query موجود
+             - عند التصفية: query مع where + orderBy
+             - بدون تصفية: query مع orderBy فقط
+          ✅ يجب أن تعمل التصفية حسب الحالة الآن
 
 metadata:
   created_by: "main_agent"
