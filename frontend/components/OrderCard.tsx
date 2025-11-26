@@ -14,8 +14,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
 
   // Safety check
   if (!order || !order.pricing) {
+    console.warn('⚠️ OrderCard: Invalid order data', order);
     return null;
   }
+
+  console.log('📋 Rendering OrderCard:', {
+    id: order.id,
+    orderNumber: order.orderNumber,
+    status: order.status,
+    pricing: order.pricing,
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
