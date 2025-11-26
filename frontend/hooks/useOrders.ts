@@ -75,14 +75,20 @@ export const useOrders = (statusFilter?: string) => {
     
     // Build query
     const ordersRef = collection(db, 'traders', user.uid, 'orders');
-    let q = query(
-      ordersRef,
-      orderBy('createdAt', 'desc')
-    );
+    let q;
 
     // Add status filter if provided
     if (statusFilter && statusFilter !== 'all') {
-      q = query(q, where('status', '==', statusFilter));
+      q = query(
+        ordersRef,
+        where('status', '==', statusFilter),
+        orderBy('createdAt', 'desc')
+      );
+    } else {
+      q = query(
+        ordersRef,
+        orderBy('createdAt', 'desc')
+      );
     }
 
     // Subscribe to real-time updates
