@@ -54,36 +54,35 @@ export default function CartScreen() {
   };
 
   const validateForm = (): boolean => {
-    if (!shippingData.customerName.trim()) {
-      Alert.alert('خطأ', 'الرجاء إدخال اسم العميل');
-      return false;
-    }
+    console.log('🔍 Validating form...', shippingData);
 
-    if (!shippingData.phone1.trim()) {
+    // Phone1 is required
+    if (!shippingData.phone1 || !shippingData.phone1.trim()) {
       Alert.alert('خطأ', 'الرجاء إدخال رقم الهاتف الأول');
       return false;
     }
 
-    if (shippingData.phone1.length < 11) {
-      Alert.alert('خطأ', 'رقم الهاتف غير صحيح');
+    // Validate Iraqi phone format (+964 + 10 digits starting with 7)
+    const phoneRegex = /^\+9647\d{9}$/;
+    if (!phoneRegex.test(shippingData.phone1)) {
+      Alert.alert('خطأ', 'رقم الهاتف غير صحيح. يجب أن يبدأ بـ 7 ويتكون من 10 أرقام');
       return false;
     }
 
+    // City is required
     if (!shippingData.city) {
       Alert.alert('خطأ', 'الرجاء اختيار المحافظة');
       return false;
     }
 
+    // Area is required
     if (!shippingData.area || !shippingData.area.trim()) {
       Alert.alert('خطأ', 'الرجاء اختيار المنطقة');
       return false;
     }
 
-    if (!shippingData.landmark.trim()) {
-      Alert.alert('خطأ', 'الرجاء إدخال أقرب نقطة دالة');
-      return false;
-    }
-
+    // Name, phone2, landmark, notes are optional
+    console.log('✅ Validation passed');
     return true;
   };
 
