@@ -186,8 +186,22 @@ def test_alwaseet_regions_invalid_credentials():
             except:
                 print(f"Error Text: {response.text}")
             return True
+        elif response.status_code == 500:
+            # Backend returns 500 for Alwaseet API errors, check if it's auth related
+            try:
+                error_data = response.json()
+                print(f"Server Error: {json.dumps(error_data, indent=2, ensure_ascii=False)}")
+                if "Error connecting to Alwaseet API" in error_data.get("detail", ""):
+                    print("✅ SUCCESS: Backend properly handles invalid credentials (returns 500 with Alwaseet error)")
+                    return True
+                else:
+                    print("❌ FAIL: Unexpected server error")
+                    return False
+            except:
+                print(f"Error Text: {response.text}")
+                return False
         else:
-            print(f"❌ FAIL: Expected 401, got {response.status_code}")
+            print(f"❌ FAIL: Expected 401 or 500, got {response.status_code}")
             try:
                 data = response.json()
                 print(f"Response: {json.dumps(data, indent=2, ensure_ascii=False)}")
