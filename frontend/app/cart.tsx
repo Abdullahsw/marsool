@@ -69,6 +69,12 @@ export default function CartScreen() {
       return false;
     }
 
+    // Validate phone2 if provided
+    if (shippingData.phone2 && shippingData.phone2.trim() && !phoneRegex.test(shippingData.phone2)) {
+      Alert.alert('خطأ', 'رقم الهاتف الثاني غير صحيح. يجب أن يبدأ بـ 7 ويتكون من 10 أرقام');
+      return false;
+    }
+
     // City is required
     if (!shippingData.city) {
       Alert.alert('خطأ', 'الرجاء اختيار المحافظة');
