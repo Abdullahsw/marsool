@@ -130,9 +130,7 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
 
       {/* Customer Name */}
       <View style={styles.fieldContainer}>
-        <Text style={styles.label}>
-          اسم العميل <Text style={styles.required}>*</Text>
-        </Text>
+        <Text style={styles.label}>اسم العميل (اختياري)</Text>
         <TextInput
           style={styles.input}
           placeholder="أدخل اسم العميل"
@@ -143,35 +141,21 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ onShippingChange }) 
         />
       </View>
 
-      {/* Phone 1 */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>
-          رقم الهاتف الأول <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="07XX XXX XXXX"
-          placeholderTextColor={theme.colors.textLight}
-          value={phone1}
-          onChangeText={setPhone1}
-          keyboardType="phone-pad"
-          textAlign="right"
-        />
-      </View>
+      {/* Phone 1 - Iraqi Format */}
+      <IraqiPhoneInput
+        label="رقم الهاتف الأول"
+        value={phone1}
+        onChangeText={setPhone1}
+        required
+      />
 
-      {/* Phone 2 */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>رقم الهاتف الثاني (اختياري)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="07XX XXX XXXX"
-          placeholderTextColor={theme.colors.textLight}
-          value={phone2}
-          onChangeText={setPhone2}
-          keyboardType="phone-pad"
-          textAlign="right"
-        />
-      </View>
+      {/* Phone 2 - Iraqi Format */}
+      <IraqiPhoneInput
+        label="رقم الهاتف الثاني"
+        value={phone2}
+        onChangeText={setPhone2}
+        required={false}
+      />
 
       {/* City Selection */}
       <View style={styles.fieldContainer}>
