@@ -215,6 +215,10 @@ test_plan:
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
+  backend_completed:
+    - "Alwaseet API Integration - Regions Endpoint"
+    - "Alwaseet API Integration - Cities Endpoint"
+    - "Alwaseet API Integration - Package Sizes Endpoint"
 
 backend:
   - task: "Alwaseet API Integration - Regions Endpoint"
