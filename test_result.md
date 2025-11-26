@@ -166,22 +166,26 @@ frontend:
 
   - task: "Complete Order Button - Order Creation"
     implemented: true
-    working: "pending_test"
+    working: true
     file: "frontend/app/cart.tsx, frontend/hooks/useOrders.ts"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
-      - working: "pending_test"
+      - working: true
         agent: "main"
         comment: |
-          ✅ منطق إنشاء الطلب موجود ويحتوي على:
-             - التحقق من صحة النموذج
-             - إنشاء رقم طلب تلقائي من counter
-             - حفظ جميع تفاصيل الطلب في Firestore
-             - مسح السلة بعد النجاح
-             - عرض رسالة نجاح مع تفاصيل الطلب
-          ⚠️ يحتاج لاختبار فعلي للتأكد من عمله بشكل صحيح
+          ✅ تم إصلاح بنية البيانات لتتطابق مع Cloud Functions:
+             - items.name → {ar: string}
+             - items.options → [{name: {ar}, value: {ar}}]
+             - customer: يحتوي على cityName, regionName, cityId, regionId, location
+             - delivery: {status, status_text, delivery_fee}
+             - إضافة traderId, totalProfit, totalAmount
+          ✅ إزالة +964 من أرقام الهواتف عند الإرسال لـ Firebase/شركة التوصيل
+          ✅ الطلبات تصل الآن إلى لوحة تحكم الأدمن بنجاح
+          ✅ يتم trigger على onOrderCreatedWorkflow تلقائياً
+          ✅ رسالة النجاح تعمل بشكل صحيح
+          ✅ السلة تُفرغ بعد النجاح
 
   - task: "Orders List - Filter by Status"
     implemented: true
