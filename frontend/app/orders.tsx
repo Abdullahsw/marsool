@@ -34,6 +34,14 @@ export default function OrdersScreen() {
 
   const { orders, loading } = useOrders(statusFilter === 'all' ? undefined : statusFilter);
 
+  // Log first order for debugging
+  React.useEffect(() => {
+    if (orders.length > 0) {
+      console.log('🔍 First order structure:', JSON.stringify(orders[0], null, 2));
+      console.log('🔍 First order has pricing?', !!orders[0].pricing);
+    }
+  }, [orders]);
+
   // Filter orders by search query
   const filteredOrders = orders.filter((order) => {
     if (!searchQuery.trim()) return true;
@@ -41,8 +49,8 @@ export default function OrdersScreen() {
     const query = searchQuery.toLowerCase();
     return (
       order.orderNumber.toString().includes(query) ||
-      order.customer.name.toLowerCase().includes(query) ||
-      order.customer.phone1.includes(query)
+      order.customer?.name?.toLowerCase().includes(query) ||
+      order.customer?.phone1?.includes(query)
     );
   });
 
